@@ -5,7 +5,7 @@
                 <h4>菜单管理</h4>
             </div>
             <div class="aside-wrap">
-                <asideItem  v-for="(item, index) in models"  :key="index" :models="item" :btnFlag="false" :level="0"  :selectProjectNode="selectProjectNode"></asideItem>
+                <treeItem  v-for="(item, index) in models"  :key="index" :models="item" rootId="02" :level="0"  :selectProjectNode="selectProjectNode"></treeItem>
             </div>
         </div>
         <div class="unit-com">
@@ -27,7 +27,7 @@
 
             <div class="top">
                 <h4 style="margin: 20px 0 10px;height:31px;" >
-                   <el-button size="mini" class="save-button" @click="save">保存</el-button>
+                   <el-button size="mini" type="primary" @click="save">保存</el-button>
                    <el-button size="mini" @click="addMenu">添加菜单</el-button>
                    <el-button size="mini" @click="removeMenu">删除菜单</el-button>
                 </h4>
@@ -108,22 +108,18 @@
                    </div>
                 </div>
             </div>
-            <!----> <div id="menu-btn" class="">
+            <div id="menu-btn" class="">
                  <div style="margin: 18px 0 10px; height:31px" class="title clearfix ">
                         <div class="content-button">
-                            <button @click="addNode">添加按钮</button>
-                            <button @click="addNode(1)">生成标准按钮</button>
+                            <button class="theme-btn" @click="addNode">添加按钮</button>
+                            <button class="theme-btn" @click="addNode(1)">生成标准按钮</button>
                         </div>
-                    <div>
-
-                    </div>
                 </div>
-                <div class="manu-table manu-table1" >
+                <div class="theme-table" >
                      <el-table ref="multipleTable" :data="ruleForm.authList"
                         border
                         height="405"
-                        :cell-style="{textAlign:'center',color:'white'}"
-                        :header-cell-style="headerCell"
+                        :cell-style="{textAlign:'center'}"
                         highlight-current-row
                        >
                             <el-table-column label="操作" width="110">
@@ -223,8 +219,8 @@
 </template>
 
 <script>
-import {mapState, mapGetters, mapActions} from 'vuex'
-import asideItem from '../../common/base/asideItemTree/asideItem.vue'
+import {mapState} from 'vuex'
+import treeItem from '@/components/common/treeItem.vue'
 import {tableMixin} from '../../public/js/mixins.js'
 import upload from '../../common/upload/upload'
 export default {
@@ -261,7 +257,7 @@ export default {
         }
     },
     components:{
-        asideItem,
+        treeItem,
         upload
     },
     created(){
@@ -645,19 +641,7 @@ export default {
     float: right;
     margin-top: -2px;
 }
-.content-button button{
-    border: 1px solid #C4C4C4;
-    border-radius: 2px;
-    /*background: #fff;*/
-    box-sizing: border-box;
-    padding: 7px 17px;
-}
-.content-button button{
-    float: left;
-}
-.content-button button:first-child{
-    border-right: 0 none;
-}
+
 .title{
     position: relative;
 }
@@ -687,55 +671,13 @@ export default {
     padding: 0 20px ;
     box-sizing: border-box;
 }
-/* .footer{
-    position: absolute;
-    bottom: 10px;
-    right: 20px;
-} */
-/* .add-from{
-    overflow: hidden;
-    margin-bottom: 20px;
-}
-.add-from .add-from-left{
-    float: left;
-}
-.add-from .add-from-right{
-    float: right;
-}
-.add-from>div>div{
-    float: left;
-} */
-/* .add-from-input{
-    width: 296px;
-    height: 38px;
-    border: 1px solid #d4d4d4;
-    border-radius: 1px;
-    box-sizing: border-box;
-    padding: 6px 0 10px 5px;
-    font-size: 14px;
-    color: #333333;
-}
-.add-from-input input{
-    width: 100%;
-}
-.add-from-input.add-from-disable{
-    background: #F4F4F4;
-} */
-/* .add-from-label{
-    height: 38px;
-    line-height: 38px;
-    width: 70px;
-    text-align: left;
-} */
-.top h4 button{
-    min-width: 90px;
-    font-size: 14px;
-}
-.top h4 .save-button{
-    background: #3B8CFF;
-    border: 0 none;
-    color: #fff;
-}
+
+
+// .top h4 .save-button{
+//     background: #3B8CFF;
+//     border: 0 none;
+//     color: #fff;
+// }
 .click-checked p{
     position: relative;
     box-sizing: border-box;
@@ -804,10 +746,6 @@ export default {
     margin-top: 20px;
     float: right;
 }
-
-  #menu-btn .bg .el-table--enable-row-transition .el-table__body td, .bg .el-table--fit, .bg .el-table th, .bg .el-table tr {
-    background: white;
-  }
 
 
 </style>

@@ -1,50 +1,39 @@
 <template>
-    <div style="width:100%;height:100%;display:flex;">
-        <div style="height:100%;width:450px;display:flex;">
-          <div class="unit-left">
-                  <div class="jr-role-container">
-                      <h4>角色列表
-                        <div class="button-list">
-                            <div class="search" style="overflow:hidden">
-                                <input type="text" v-model="search" @keyup.enter="loadRoleList()" placeholder="请输入关键字搜索">
-                                <button @click="loadRoleList()"></button>
-                            </div>
-                        </div>
-                      </h4>
-                      <div class="unit_com_table">
-                          <el-table :data="roleList"
-                            border
-                            ref="roleTalble"
-                            :cell-style="{textAlign:'left'}"
-                            height="100%"
-                            id="el-table"
-                            highlight-current-row
-                            @current-change="handleCurrentChange">
-                              <el-table-column label="角色类型">
-                                  <template slot-scope="scope">
-                                      <span style="white-space: nowrap;margin-left: 10px">{{scope.row.roleName}}</span>
-                                      <span style="color: rgb(59, 140, 255);float: right;" v-if="scope.row.isSys">内置角色</span>
-                                  </template>
-                              </el-table-column>
-                              <!-- <el-table-column label="角色描述">
-                                  <template slot-scope="scope">
-                                      <span style="white-space: nowrap;margin-left: 10px">{{ scope.row.remark}}</span>
-                                  </template>
-                              </el-table-column> -->
-                          </el-table>
-                      </div>
-                  </div>
-              </div>
+<div class="main">
+    <div class="main-left">
+      <div class="title">
+        <h4>角色列表</h4>
+        <div class="search-box">
+            <input type="text" v-model="search" @keyup.enter="loadRoleList()" placeholder="请输入关键字搜索">
+            <i></i>
+            <button class="theme-btn" @click="loadRoleList()">搜索</button>
         </div>
+      </div>
+      <div class="theme-table">
+          <el-table :data="roleList"
+            border
+            ref="roleTalble"
+            height="100%"
+            highlight-current-row
+            @current-change="handleCurrentChange">
+              <el-table-column label="角色名称">
+                  <template slot-scope="scope">
+                      <span style="white-space: nowrap;">{{scope.row.roleName}}</span>
+                      <span style="color: rgb(59, 140, 255);float: right;" v-if="scope.row.isSys">内置角色</span>
+                  </template>
+              </el-table-column>
+          </el-table>
+      </div>
+    </div>
         <div style="height:100%;width:100%;display:flex;">
              <div class="unit-com" style="width: 100%;">
                <h4>菜单权限：{{selectRoleName}}
                     <div class="button-list">
-                        <button v-if="util.isAllowBtn('btn_senior')" style="background: #3B8CFF;border: 1px solid #3B8CFF;color: #fff;margin-left: 10px;" @click="seniorConfig()">高级配置</button>
-                        <button v-if="util.isAllowBtn('btn_save')" style="background: #3B8CFF;border: 1px solid #3B8CFF;color: #fff;margin-left: 10px;" @click="saveData()">保存权限</button>
+                        <button v-if="sessionUtil.isAllowBtn('btn_senior')" style="background: #3B8CFF;border: 1px solid #3B8CFF;color: #fff;margin-left: 10px;" @click="seniorConfig()">高级配置</button>
+                        <button v-if="sessionUtil.isAllowBtn('btn_save')" style="background: #3B8CFF;border: 1px solid #3B8CFF;color: #fff;margin-left: 10px;" @click="saveData()">保存权限</button>
                     </div>
                 </h4>
-                <el-tabs v-model="activeName" @tab-click="handleTabClick" class="jr-tabs" >
+                <el-tabs v-model="activeName" class="jr-tabs" >
                   <el-tab-pane label="角色权限" name="role-auth" class="jr-tab" >
                     <tree-table  v-if="show" :columns="treeColumns"
                       :data="treeData"
@@ -153,8 +142,6 @@
 
 <script>
 import { tableMixin } from '../../../public/js/mixins.js'
-import { getConfig } from '@/api/form-render'
-import { debuglog } from 'util';
 import { setTimeout } from 'timers';
 export default {
   mixins:[tableMixin],
@@ -282,7 +269,6 @@ export default {
 
   },
   created() {
-    this.util.init(this);
     this.fontColor=this.$store.state.themeBG
     this.bgColor=this.$store.state.themeColor;
   },
@@ -291,8 +277,7 @@ export default {
   },
   mounted() {
     // 数据初始化
-    this.util.init(this);
-    this.init();
+    this.loadRoleList();
   },
   computed: {
     disabled (row){
@@ -326,23 +311,18 @@ export default {
         }
         return items
      },
-     init: function () {
-        this.loadRoleList();
-     },
-     handleTabClick(tab, event){
-       //console.log(tab, event)
-     },
      loadRoleList(){//加载角色
-      var _this = this;
       this.util.mask()
-      this.util.restGet('/api_v1/org/roles', { companyUid: this.$store.state.companyUid,start:0,pageSize:100,search:this.search,ifContainCommon:false }, (res)=> {
+      // this.util.restGet('/api_v1/org/roles', { companyUid: this.$store.state.companyUid,start:0,pageSize:100,search:this.search,ifContainCommon:false }, (res)=> {
+      this.util.restGet('http://api.com', null, (res)=> {
           this.util.unmask();
+          console.log("ttp://api.com=======>",res);
           if (res.status == 200 && res.data) {
               this.roleList=res.data
               this.selectRole = res.data[0]
-              this.loadTree()
-              this.$refs['roleTalble'].setCurrentRow(this.roleList[0])
-              this.handleCurrentChange(res.data[0])
+              // this.loadTree()
+              // this.$refs['roleTalble'].setCurrentRow(this.roleList[0])
+              // this.handleCurrentChange(res.data[0])
           }
       });
      },
@@ -716,11 +696,27 @@ export default {
   }
 };
 </script>
-<style scoped>
-  .jr-role-container{
-    display: flex;
-    flex-flow: column;
+<style scoped lang="scss">
+.main{
+  width:100%;
+  height:100%;
+  display:flex;
+  &-left{
+    width: 616px;
+    height: 100%;
+    box-sizing: border-box;
+    margin-right: 10px;
+    .title{
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .theme-table{
+      height: 100%;
+    }
   }
+}
+
 .el-table .success-row {
     background: #f0f9eb;
   }
@@ -872,9 +868,6 @@ h4 i{
   box-sizing: border-box;
 }
 
-.unit_com_table{
-  height: 100%;
-}
 
 </style>
 <style lang="scss">

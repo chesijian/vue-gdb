@@ -7,7 +7,9 @@ import echarts from 'echarts'
 import { validUtil, cookieUtil } from '@/utils/utils.js'
 import {sessionUtil} from './utils/sessionUtil'
 import '@/public/css/zzStyle.css'
+import '@/public/css/themeStyle.scss'
 // import '@/public/js/easy-player-element.min.js'
+require('./mock/index')
 import store from './store'
 import ElementUI from 'element-ui'
 import VueBus from 'vue-bus'
@@ -57,7 +59,8 @@ Vue.component(VePie.name, VePie)
 Vue.component(VeRing.name, VeRing)
 Vue.component(VeHistogram.name, VeHistogram)
 Vue.component(VeMap.name, VeMap)
-
+import vmodal from 'vue-js-modal'
+Vue.use(vmodal)
 Vue.use(VueBus)
 Vue.use(ElementUI)
 Vue.use(VueQuillEditor)

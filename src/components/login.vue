@@ -69,11 +69,11 @@
         }
     },
     created() {
-        // this.changeQrCode(this.tabItem);
+        this.changeQrCode(this.tabItem);
     },
     mounted() {
         
-        // this.changeVCode()
+        this.changeVCode()
     },
     directives: {//自动获取焦点
         focus: {
@@ -166,6 +166,8 @@
               random:this.random,
             code:this.code,
             ifContainAuth:true,
+            // userId: encrypt(this.userName),
+            // password: encrypt(this.passworld),
             userId: this.userName,
             password: this.passworld,
             signType: 1,

@@ -6,58 +6,27 @@
          <div  v-if="memberOrPost">
             <selectmore  :models="selectmoreObj" @selectQuarterOut="selectMoreIn"></selectmore>
         </div>
-        <div v-if="isaddPost=='addrolepage'" class="add-people-box">
-            <div class="back" @click="isaddPost=''"><button>返回上一级</button></div>
-            <div>
-                <h5 style="font-size:18px;margin:30px 0;font-weight:400">角色信息</h5>
-                 <div style="overflow:hidden;position:relative">
-                    <div class="gain" style="margin-bottom:0">
-                        <div >角色名称 <span class="Required">*</span></div>
-                        <input type="text" v-model="roleObj.roleName" placeholder="请输入角色名称">
-                    </div>
-                    <div class="gain" style="margin-bottom:0">
-                        <div >角色描述 <span class="Required">*</span></div>
-                        <input type="text" v-model="roleObj.remark" placeholder="请输入角色描述">
-                    </div>
-                </div>
-                <h5 style="font-size:18px;margin:30px 0;font-weight:400" >
-                    <!-- 权限选择 -->
-                    <!-- <p @click="AllCheck()">
-                        <img src="../../assets/administrationIcon/active.png" v-if="isAllCheck" alt="">
-                        <img src="../../assets/administrationIcon/defult.png" v-if="!isAllCheck" alt="">
-                        全选
-                    </p> -->
-                    <div class="section-footer" style="width:auto;float:right">
-                        <button style="border-color:#F08B00;background:#F08B00;color:#fff;" @click="submitRole()">提交</button>
-                        <button style="color:#666;background:#fff;" @click="resetRole">重置</button>
-                    </div>
-                </h5>
-                <!-- <div class="jurisdiction-list">
-                    <ul>
-                        <li v-for="(jurisdictionItem,key) in jurisdictionList" :key="key">
-                            <p @click="jurisdictionAll(jurisdictionItem)">
-                                <img src="../../assets/administrationIcon/active.png" v-if="jurisdictionItem.isAll" alt="">
-                                <img src="../../assets/administrationIcon/defult.png" v-if="!jurisdictionItem.isAll" alt="">
-                                {{jurisdictionItem.name}}
-                            </p>
-                            <div style="height:100%;width:100%;overflow:auto;max-height:204px;">
-                                <div class="options" v-for="(item,indexs) in jurisdictionItem.children" :key="indexs">
-                                    <span>{{item.name}}</span>
-                                    <div style="float:right;">
-                                        <div class="options-checked" v-for="(obj,index) in item.children" :key="index" @click="handelSelected(obj,jurisdictionItem)">
-                                            <img src="../../assets/administrationIcon/active.png" v-show="ifSelected(obj)" alt="">
-                                            <img src="../../assets/administrationIcon/defult.png" v-show="!ifSelected(obj)" alt="">
-                                            {{obj.name}}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                    </ul>
-                </div> -->
+        <modal name="role-modal" class="theme-modal" height="auto" transition="pop-out" :width="700"  :draggable="true">
+			<div class="title">
+				<p>角色管理(编辑/新增)</p>
+                <i @click="$modal.hide('role-modal')" class="el-icon-close"></i>
+			</div>
+			<div class="modal-content">
+				<el-form ref="form" :model="roleObj" label-width="80px">
+                    <el-form-item label="角色名称">
+                        <el-input type="text" v-model="roleObj.roleName"></el-input>
+                    </el-form-item>
+                    <el-form-item label="角色描述">
+                        <el-input type="textarea" v-model="roleObj.remark"></el-input>
+                    </el-form-item>
+                </el-form>
+			</div>
+            <div class="modal-footer">
+                <el-button size="mini" @click="$modal.hide('role-modal')">关闭</el-button>
+                <el-button size="mini" type="primary" @click="submitRole">提交</el-button>
             </div>
-             
-        </div>
+		</modal>
+        
         
         <div v-if="isaddPost==''"  style="height:100%;width:100%;">
             <div class="list-box">
@@ -70,12 +39,12 @@
                                         <input type="text" v-model="search" @keyup.enter="getRoleList()" placeholder="请输入关键字搜索">
                                         <button @click="getRoleList()"></button>
                                     </div>
-                                    <button style="margin-right: 20px;" @click="deleteSome()" v-if="sessionUtil.isAllowDelete('org_RoleManage')">删除</button>
-                                    <button :style="{background:bgColor,borderColor:bgColor,color:'#fff'}" @click="addRoles()"  v-if="sessionUtil.isAllowAdd('org_RoleManage')">添加角色</button>
+                                    <button class="theme-btn theme-delete" @click="deleteSome()" v-if="sessionUtil.isAllowDelete('org_RoleManage')">删除</button>
+                                    <button class="theme-btn" @click="addRoles()"  v-if="sessionUtil.isAllowAdd('org_RoleManage')">添加角色</button>
                                 </div>
                             </h4>
                         </div>
-                        <div ref="tableHeight" style="height:100%;">
+                        <div ref="tableHeight" style="height:100%;" class="theme-table">
                             <el-table ref="table" :data="roleList" style="width: 100%"  border
                                 :header-row-style="{overflow:'hidden',borderColor:'#44d2ff'}" :row-style="{overflow:'hidden',borderColor:'#44d2ff'}"
                                 :cell-style="{textAlign:'center',color:'#fff',boxShadow:' 0 0 0 0 #D9D9D9, inset 0 0 0 0 #D9D9D9',borderColor:'#44d2ff'}"
@@ -110,11 +79,11 @@
                         <div style="width:100%;position:relative;box-sizing:border-box;">
                             <h4 style="position:absolute;width:100%;top:-34px;left:0;box-sizing:border-box;">所属角色：{{belongRole.roleName}}
                                 <div class="button-list">
-                                    <button :style="{background:bgColor,borderColor:bgColor,color:'#fff'}" @click="addPeople()" v-if="sessionUtil.isAllowBtn('010104:btn_add_member')" >添加人员</button>
+                                    <button class="theme-btn" @click="addPeople()" v-if="sessionUtil.isAllowBtn('010104:btn_add_member')" >添加人员</button>
                                 </div>
                             </h4>
                         </div>
-                        <div style="height:100%;" ref="tableHeight1">
+                        <div style="height:100%;" class="theme-table" ref="tableHeight1">
                             <el-table ref="multipleTable" :data="tableData1" style="width: 100%" :header-row-style="{overflow:'hidden',}"
                                 :row-style="{overflow:'hidden',}" border
                                 :cell-style="{textAlign:'center',boxShadow:' 0 0 0 0 #D9D9D9, inset 0 0 0 0 #D9D9D9'}"
@@ -211,12 +180,6 @@ export default {
     created(){
         this.fontColor=this.$store.state.themeBG
         this.bgColor=this.$store.state.themeColor;
-        // this.util.mask()
-        // this.axiosObj.all([this.getRoleList(),this.getJurisdictionData()], (res)=> {
-        //     this.util.unmask();
-        // });
-        // this.getRoleList();
-        // this.getJurisdictionData();
         
     },
     mounted() {
@@ -224,6 +187,7 @@ export default {
             this.tableHeightNum=this.$refs.tableHeight.offsetHeight
             this.tableHeightNum1=this.$refs.tableHeight1.offsetHeight
         })
+        this.getRoleList();
     },
     components:{
         selectmore,selectQuarters
@@ -278,9 +242,8 @@ export default {
         },
         getRoleList(){ //获取角色列表
             this.util.mask()
-           // this.util.post('/org/getRoles', { companyUid: this.$store.state.companyUid }, (res)=> {
-            this.util.restGet('/api_v1/org/roles', { companyUid: this.$store.state.companyUid,start:0,pageSize:100,search:this.search,ifContainCommon:true }, (res)=> {
-                // console.log("roles===11===",res);
+           // this.util.post('/api_v1/org/roles', { companyUid: this.$store.state.companyUid,start:0,pageSize:100,search:this.search,ifContainCommon:true }, (res)=> {
+            this.util.restGet('http://api.com', null, (res)=> {
                 if (res.status == 200) {
                     this.roleList=res.data;
                 } else {
@@ -309,7 +272,8 @@ export default {
         addRoles(){//添加角色
             this.roleObj={};
             this.selectJurisdiction=[];
-            this.isaddPost='addrolepage';
+            // this.isaddPost='addrolepage';
+            this.$modal.show('role-modal');
         },
         editRole(node){//编辑角色
             this.roleObj=node;
@@ -580,8 +544,10 @@ export default {
 </script>
 
 <style scoped>
-.Post-manage-box button{
-  padding: 0;
+
+.modal-content{
+    height: 230px;
+    padding: 20px;
 }
 .el-table .success-row {
     background: #f0f9eb;
@@ -650,14 +616,14 @@ input{
     color: #fff;
     background: transparent;
 }
-.button-list button{
+/* .button-list button{
     float: left;
     height: 28px;
     min-width: 60px;
     line-height: 27px;
     box-sizing: border-box;
     padding: 0 10px;
-}
+} */
 .people-list{
     box-sizing: border-box;
 }

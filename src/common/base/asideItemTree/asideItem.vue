@@ -12,8 +12,7 @@
           <span  v-if="util.isAllowBtn('depart:btn_edit')" @click.stop.prevent="edit()" class="edit" ></span>
           <span  v-if="util.isAllowBtn('depart:btn_add')" @click.stop.prevent="add()" class="addClass" ></span>
         </div>
-        <span 
-					style="padding:10px 0 10px 20px;display:block"
+        <span	style="padding:10px 0 10px 20px;display:block"
 					:class="{checked:  models.id == selectProjectNode.id}"
 				>
 					{{models.label ? models.label: models.text ? models.text : models.departName}}

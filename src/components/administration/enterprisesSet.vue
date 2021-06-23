@@ -281,16 +281,14 @@
                     <img src="../../assets/administrationIcon/search.png" alt="">
                   </button>
                 </div>
-                <!--<button @click="moveMember()">移动部门</button>-->
                 <!-- <button v-if="sessionUtil.isAllowBtn('010102:up_wx_data')" @click="SyncWeChat()">微信同步</button> -->
-                <!-- <button @click="isUploading=true">导入</button> -->
-                <button v-if="sessionUtil.isAllowBtn('010102:change_psw')" @click="changePsw()">修改密码</button>
-                <button v-if="sessionUtil.isAllowDelete('org_Structure')" @click="removeMember()">删除</button>
-                <button @click="addmember()" v-if="sessionUtil.isAllowAdd('org_Structure')" :style="{color:'#fff',backgroundColor:bgColor,borderColor:bgColor}">添加成员
+                <button class="theme-btn" v-if="sessionUtil.isAllowBtn('010102:change_psw')" @click="changePsw()">修改密码</button>
+                <button class="theme-btn" v-if="sessionUtil.isAllowDelete('org_Structure')" @click="removeMember()">删除</button>
+                <button class="theme-btn" @click="addmember()" v-if="sessionUtil.isAllowAdd('org_Structure')" :style="{color:'#fff',backgroundColor:bgColor,borderColor:bgColor}">添加成员
                 </button>
               </div>
             </div>
-            <div ref="tableHeight" style="height:100%;width:100%;">
+            <div ref="tableHeight" class="theme-table" style="height:100%;width:100%;">
               <el-table ref="multipleTable" :data="orgUserDatas"  style="width: 100%"
                       :header-row-style="{background:'transparent',overflow:'hidden',}" border
                       :row-style="{overflow:'hidden',}" :cell-style="{textAlign:'center',}" :height="tableHeightNum"
@@ -867,11 +865,11 @@
       changetab (str) {
         this.back()
         this.activeName = str
-        if(str=='角色管理'){
-          this.$nextTick(()=>{
-            this.$refs.roleLoadData.getRoleList()
-          })
-        }
+        // if(str=='角色管理'){
+        //   this.$nextTick(()=>{
+        //     this.$refs.roleLoadData.getRoleList()
+        //   })
+        // }
       },
       addmember() {//添加员工
         this.addPeople = true
@@ -1129,9 +1127,7 @@
   }
 </script>
 <style scoped>
-.enter-box button{
-  padding: 0;
-}
+
   .enter-box {
     width: 100%;
     height: 100%;
@@ -1264,19 +1260,7 @@
     border:  0 none;
     outline: 0 none;
   }
-  .operations > button {
-       padding: 0;
-    margin-right: 20px;
-    width: 78px;
-    height: 28px;
-    line-height: 26px;
-    float: right;
-    color: #fff;
-    font-size: 14px;
-    text-align: center;
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
-  }
+ 
 
   .editIcon {
     margin-left: 20px;
@@ -1434,9 +1418,7 @@
     left: 650px;
     top: 50px;
   }
-  button{
-    color: #333;
-  }
+ 
   .delete-show-box {
     width: 100%;
     height: 100%;

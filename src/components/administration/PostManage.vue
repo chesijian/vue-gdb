@@ -10,10 +10,13 @@
                 </div>
             </div>
         </div>
-        <div v-if="isAdds" class="delete-show-box">
-            <div class="add-box">
-                <h5 style="font-size:18px;margin:30px 0;font-weight:400">添加岗位</h5>
-                <ul>
+        <modal name="post-modal" class="theme-modal" height="auto" transition="pop-out" :width="600"  :draggable="true">
+			<div class="title">
+				<p>添加岗位</p>
+                <i @click="$modal.hide('post-modal')" class="el-icon-close"></i>
+			</div>
+			<div class="modal-content">
+				<ul>
                     <li>
                         <div >岗位名称 <span class="Required">*</span></div>
                         <input type="text" class="add-input" v-model="postObj.positionName" placeholder="请输入岗位名称">
@@ -35,12 +38,13 @@
                         <input type="text" class="add-input" v-model="postObj.sort" placeholder="用于显示先后顺序，数值小的排前面">
                     </li>
                 </ul>
-                 <div class="delete-show-footer">
-                    <button :style="{color:'#fff',backgroundColor:bgColor,borderColor:bgColor}" @click="SaveData()">提交</button>
-                    <button @click="cancel()">取消</button>
-                </div>
+			</div>
+            <div class="modal-footer">
+                <el-button size="mini" @click="$modal.hide('post-modal')">关闭</el-button>
+                <el-button size="mini" type="primary" @click="SaveData">提交</el-button>
             </div>
-        </div>
+		</modal>
+        
         <div  v-if="memberOrPost">
             <selectmore  :models="selectmoreObj" @selectQuarterOut="selectPostionCallback"></selectmore>
         </div>
@@ -52,12 +56,12 @@
                             <input type="text" v-model="search" @keyup.enter="refreshPositionList()" placeholder="请输入关键字搜索">
                             <button @click="refreshPositionList()"></button>
                         </div>
-                        <button v-if="sessionUtil.isAllowDelete('org_PositionManage')" style="margin-right: 20px;" @click="deleteSome()">删除</button>
-                        <button v-if="sessionUtil.isAllowAdd('org_PositionManage')" :style="{background:bgColor,borderColor:bgColor,color:'#fff'}" @click="add()">添加岗位</button>
+                        <button v-if="sessionUtil.isAllowDelete('org_PositionManage')" class="theme-btn theme-delete" style="margin-right: 20px;" @click="deleteSome()">删除</button>
+                        <button v-if="sessionUtil.isAllowAdd('org_PositionManage')" class="theme-btn" @click="add()">添加岗位</button>
                     </div>
                 </h4>
             </div>
-            <div style="width:100%;height:100%;" ref="tableHeight">
+            <div style="width:100%;height:100%;" ref="tableHeight" class="theme-table">
                 <el-table ref="multipleTable" :data="positionList" style="width: 100%"
                     :header-row-style="{overflow:'hidden'}"
                     :row-style="{overflow:'hidden',}" border
@@ -157,6 +161,7 @@ export default {
                 sort:this.positionList==undefined? 0:this.positionList.length+1,
             };
             this.isAdds=true;
+            this.$modal.show('post-modal')
         },
         editPost(data){//编辑岗位
             this.util.clone(data,this.postObj);
@@ -247,7 +252,7 @@ export default {
     }
 }
 </script>
-<style scoped>
+<style scoped lang="scss">
 .Post-manage-box{
     width: 100%;
     height: 100%;
@@ -309,9 +314,7 @@ export default {
     left: -13px;
     top: 4px;
 }
-.Post-manage-box button{
-  padding: 0;
-}
+
 input{
     border:  0 none;
     outline: 0 none;
@@ -373,29 +376,35 @@ input{
     width:  590px ;
     height: auto;
 }
-.add-box ul{
-    overflow: hidden;
+.modal-content{
+    padding: 30px 20px;
+    ul{
+        overflow: hidden;
+        li{
+            height: 55px;
+            float: left;
+            width: 50%;
+            padding-right: 15px;
+            box-sizing: border-box;
+            margin-bottom: 20px;
+            .add-input{
+                padding: 10px 0;
+                height: 15px;
+                width: 100%;
+                border-bottom: 1px solid #e7e7e7;
+                display: inline-block;
+            }
+        }
+        li:nth-child(2n){
+            padding-right: 0px;
+            padding-left: 15px;
+        }
+        
+    }
+   
     
 }
-.add-box ul li{
-    height: 55px;
-    float: left;
-    width: 50%;
-    padding-right: 15px;
-    box-sizing: border-box;
-    margin-bottom: 20px;
-}
-.add-box ul li:nth-child(2n){
-    padding-right: 0px;
-    padding-left: 15px;
-}
-.add-box ul li .add-input{
-    padding: 10px 0;
-    height: 15px;
-    width: 100%;
-    border-bottom: 1px solid #e7e7e7;
-    display: inline-block;
-}
+
  select{
      width: 100%;
     margin: 0;

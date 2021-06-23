@@ -75,16 +75,7 @@ h4::before{
   height: 22px;
   top: 1px;
 }
-button{
-  background: rgba(68,210,255,0.2);
-  border-radius: 1px;
-  padding: 3px 9px;
-  font-size: 14px;
-  color: #fff;
-  border: 0 none;
-  outline: 0 none;
-  cursor: pointer;
-}
+
 .proj-box{
   width: 100%;
   height: 100%;
@@ -139,6 +130,7 @@ button{
 .clear::after{
   zoom: 1
 }
+/* 
 .bg .el-table th,.bg .el-table tr{
   background: transparent;
 }
@@ -160,9 +152,9 @@ button{
 .bg .el-table--enable-row-hover .el-table__body tr:hover>td{
   background: rgba(32,165,255,.3) !important;
    background:#000 !important;
-}
+} */
 /* 高亮显示 最外层加类名 highlight-current-row */
-.bg .highlight-current-row.el-table--enable-row-hover .el-table__body tr:hover>td{
+/* .bg .highlight-current-row.el-table--enable-row-hover .el-table__body tr:hover>td{
   background: rgba(32,165,255,.5) ;
 }
 .bg .highlight-current-row.el-table .el-table__body .el-table__row.current-row>td{
@@ -174,11 +166,12 @@ button{
 .bg  .el-table__body  tr.current-row>td{
   background-color: rgba(32,165,255,0.5);
 }
-/* add-part-box */
+
 .bg .el-table,.bg .el-table thead{
   color: #fff;
-}
-.bg .el-input__inner{
+} */
+
+/* .bg .el-input__inner{
   background: transparent;
   border: 0 none;
   height: 32px;
@@ -187,7 +180,7 @@ button{
   width: 100%;
   height: 100%;
   padding:0;
-}
+} */
 .bg .add-part .el-input__inner{
   color: #333;
 }
@@ -241,30 +234,7 @@ button{
   left: 50%;
   transform: translate(-50%,-50%)
 }
-.search-box{
-  position: relative;
-}
-.search-box input{
-  float: left;
-  width: 150px;
-  height: 26px;
-  background: transparent;
-  color: #fff;
-  border: 1px solid #44D2FF;
-  padding-left: 26px;
-  box-sizing: border-box;
-}
-.search-box i{
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 26px;
-  height: 26px;
-  background: url('../../assets/indexImg/search.png') no-repeat center;
-}
-.search-box button{
-  float: left;
-}
+
 .bg .add-part-box{
   width: 100%;
   height: 100%;
