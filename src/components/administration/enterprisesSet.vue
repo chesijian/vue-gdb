@@ -249,20 +249,12 @@
     </div>
     <div class="enter-setion enter-setion1" v-if="activeName=='组织管理'&&!addOrganization&&!addPeople">
       <div class="box-style enter-setion-ul" v-if="sessionUtil.isAllowMenu('SYS_01')"  style="box-sizing:border-box;">
-         <div  style="position:relative;padding-top:77px;">
+         <div  style="position:relative;padding-top:57px;">
           <div class="enter-setion-title" style="height:108px;position:absolute;left:0;top:0;width:100%;padding: 10px;box-sizing: border-box;">
             <h4   style="padding:0;padding-left:26px;">
               组织架构
               <span class="add-icon" @click="addDepart()" v-if="sessionUtil.isAllowAdd('org_Structure')"></span>
             </h4>
-            <!--<div class="prises-input-box" style="padding: 0">
-              <div class="prises-input" style="width:296px;">
-                <input type="text" v-model="search1" @keyup.enter="refreshDepart()"  placeholder="请输入关键字搜索">
-                <span class="search-icon">
-                      <img src="../../assets/administrationIcon/search.png" @click="refreshDepart()" alt="">
-                  </span>
-              </div>
-            </div>-->
           </div>
           <div style="width:100%;height:100%;overflow:auto;color:#fff;">
             <enterprisesSetItem v-for="(item,key) in orgDatas" :key="key" :level="0" :models="item"></enterprisesSetItem>
@@ -275,17 +267,20 @@
             <h4 style="position:absolute;top:10px;left:10px;">{{orgSelected.label}}({{orgSelected.totalCount}}人)</h4>
             <div style="width:100%;overflow-x:auto;position:absolute;top:60px;left:10px;">
               <div class="operations">
-                <div class="prises-input" style="line-height:23px;width:220px;float:right;">
+                <div>
+                  <button class="theme-btn" @click="addmember()" v-if="sessionUtil.isAllowAdd('org_Structure')">添加成员</button>
+                  <button class="theme-btn" v-if="sessionUtil.isAllowBtn('010102:change_psw')" @click="changePsw()">修改密码</button>
+                  <button class="theme-btn theme-delete" v-if="sessionUtil.isAllowDelete('org_Structure')" @click="removeMember()">删除</button>
+                </div>
+                <div class="search-box">
                   <input type="text" v-model="search" @keyup.enter="seachUsers()" placeholder="请输入关键字搜索">
-                  <button @click="seachUsers()" class="search-icon" style="background:transparent">
+                  <button @click="seachUsers()" class="theme-btn" style="background:transparent">
                     <img src="../../assets/administrationIcon/search.png" alt="">
                   </button>
                 </div>
                 <!-- <button v-if="sessionUtil.isAllowBtn('010102:up_wx_data')" @click="SyncWeChat()">微信同步</button> -->
-                <button class="theme-btn" v-if="sessionUtil.isAllowBtn('010102:change_psw')" @click="changePsw()">修改密码</button>
-                <button class="theme-btn" v-if="sessionUtil.isAllowDelete('org_Structure')" @click="removeMember()">删除</button>
-                <button class="theme-btn" @click="addmember()" v-if="sessionUtil.isAllowAdd('org_Structure')" :style="{color:'#fff',backgroundColor:bgColor,borderColor:bgColor}">添加成员
-                </button>
+                
+                
               </div>
             </div>
             <div ref="tableHeight" class="theme-table" style="height:100%;width:100%;">
@@ -1126,8 +1121,15 @@
     }
   }
 </script>
-<style scoped>
-
+<style scoped lang="scss">
+.operations {
+  display: flex;
+  justify-content: space-between;
+  padding-right: 22px;
+  button{
+    margin-right: 10px;
+  }
+}
   .enter-box {
     width: 100%;
     height: 100%;
@@ -1186,45 +1188,13 @@
     overflow: hidden;
   }
 
-  .prises-input-box {
-    padding: 13px 20px;
-    overflow: hidden;
+.search-box{
+  border:1px solid #44d2ff;
+  input{
+    border: none;
   }
-
-  .prises-input {
-    float: left;
-    width: 280px;
-    height: 28px;
-    line-height: 27px;
-    border:1px solid #44d2ff;
-    box-sizing: border-box;
-    position: relative;
-    padding: 0 32px 0 6px;
-  }
-
-  .prises-input input {
-    color: #fff;
-    width: 100%;
-    background: transparent;
-  }
-
-  .prises-input .search-icon {
-    width: 26px;
-    height: 26px;
-    position: absolute;
-    right: 0px;
-    top: 0px;
-    box-sizing: border-box;
-    padding: 5px;
-  }
-
-  .prises-input .search-icon img {
-    width: 12px;
-    position: absolute;
-    right: 7px;
-    top: 7px;
-  }
-
+}
+ 
   .prises-set {
     height: 54px;
     line-height: 54px;
@@ -1252,14 +1222,11 @@
     cursor: pointer;
   }
 
-  .operations {
-    float: left;
-    margin-bottom: 20px;
-  }
-  input{
-    border:  0 none;
-    outline: 0 none;
-  }
+  
+  // input{
+  //   border:  0 none;
+  //   outline: 0 none;
+  // }
  
 
   .editIcon {

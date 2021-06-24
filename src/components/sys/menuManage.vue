@@ -797,9 +797,7 @@ border: 1px solid #e9ebef;
 #el-form .proj-box{
     color: #fff;
 }
-.qingqiu .el-input--suffix .el-input__inner{
-    color: #fff;
-}
+
 .qingqiu.el-select .el-input.is-disabled .el-input__inner{
     background:transparent;
 }

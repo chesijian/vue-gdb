@@ -10,9 +10,9 @@
                     <div style="margin-right:15px" class="search-box">
                         <input type="text" v-model="searchValue" @keyup.enter="loadData">
                         <i></i>
-                        <button @click="loadData">搜索</button>
+                        <button class="theme-btn" @click="loadData">搜索</button>
                     </div>
-                    <button v-if="sessionUtil.isAllowAdd('t_project')"  @click="addProj">添加</button>
+                    <button class="theme-btn" v-if="sessionUtil.isAllowAdd('t_project')"  @click="addProj">添加</button>
                   </div>
               </div>
               
@@ -50,11 +50,11 @@
       </div>
       <div class="proj-box" style="padding-top:0" v-if="activeStr=='设置'">
         <div class="box-style" style="height:100%">
-          <div class="set-box" style="position:relative;padding-top:45px;">
+          <div class="set-box theme-from" style="position:relative;padding-top:45px;">
             <div class="set-top">
-              <button @click="back()">返回上一级</button>
-              <button @click="saveData()">保存</button>
-              <button @click="quoteProject">引用项目立项</button>
+              <button class="theme-btn" @click="back()">返回上一级</button>
+              <button class="theme-btn" @click="saveData()">保存</button>
+              <button class="theme-btn" @click="quoteProject">引用项目立项</button>
             </div>
             <div style="overflow-y:auto;height:100%;width:100%;box-sizing: border-box;padding-right: 6px;">
               <div class="set-form">
@@ -80,7 +80,7 @@
                   </div>
                   <div class="form-item-box">
                     <div class="form-label">负责人</div>
-                    <div class="form-input" style="padding:0">
+                    <div class="form-input" style="border: 1px solid #dcdfe6;">
                       <span style="display:block;height:100%" @click="selectLinkman">{{linkMan.userName}}</span>
                     </div>
                   </div>
@@ -123,7 +123,6 @@
                           :key="index"
                           :label="item"
                           :value="item">
-                          <!--:value="item.orders"-->
                         </el-option>
                       </el-select>
                     </div>
@@ -224,7 +223,6 @@
                   </div>
                 </div>
                 <div class="set-form-box-right" >
-                  <!-- :style="{background:fillObj.id?'transparent':'#F4F4F4'}" -->
                   <div  style="margin-bottom:20px;" class="form-item-box" >
                     <div class="form-label">项目头像</div>
                     <div class="form-input" style="border:0;height:154px;padding-left:0;text-align:center;">
@@ -334,34 +332,34 @@
               </div>
               
 
-              <div class="form-item-box" style="width:50%;float:left;">
+              <div class="form-item-box" style="width:69%;float:left;">
                 <div class="form-label">省份</div>
-                <div class="form-input" style="width:80px;margin-right:20px;">
+                <div class="form-input" style="width:85px;margin-right:20px;">
                   <el-input v-model="mainData.ADDR_PROVINCE_"></el-input>
                   <!-- <el-select v-model="mainData.ADDR_PROVINCE_" placeholder="省" :disabled="true" @change="getCityList()" >
                     <el-option label="---请选择---" value=""></el-option>
                     <el-option v-for="(opt, index) in provinceList"  :key="index" :label="opt.name" :value="opt.id"></el-option>
                   </el-select> -->
                 </div>
-                <div class="form-input" style="margin-right:20px;width:80px">
+                <div class="form-input" style="margin-right:20px;width:85px">
                   <el-input v-model="mainData.ADDR_CITY_"></el-input>
                 <!-- <el-select v-model="mainData.ADDR_CITY_" placeholder="市" :disabled="true" @change="getCountyList()">
                   <el-option label="---请选择---" value=""></el-option>
                   <el-option v-for="(opt, index) in cityList"  :key="index" :label="opt.name" :value="opt.id"></el-option>
                 </el-select> -->
                 </div>
-                <div class="form-input" style="margin-right:20px;width:80px">
+                <div class="form-input" style="margin-right:20px;width:90px">
                   <el-input v-model="mainData.ADDR_COUNTY_"></el-input>
                   <!-- <el-select v-model="mainData.ADDR_COUNTY_" placeholder="县" :disabled="true" @change="$forceUpdate()">
                     <el-option label="---请选择---" value=""></el-option>
                     <el-option v-for="(opt, index) in countyList"  :key="index" :label="opt.name" :value="opt.id"></el-option>
                   </el-select> -->
                 </div>
-                <div class="form-input" style="width:auto;overflow:hidden;float:none">
+                <div class="form-input" style="width:490px;">
                   <el-input v-model="mainData.ADDR_NAME_"></el-input>
                 </div>
               </div>
-              <div class="form-item-box" style="width:50%;float:left;padding-right:50px">
+              <div class="form-item-box" style="width:31%;float:left;padding-right:50px">
                 <div class="form-label" style="padding-left:20px;">地图选点</div>
                 <div class="form-input" >
                   <el-input v-model="mainData.ADDR_LOCATION_"></el-input>
@@ -390,15 +388,15 @@
                 </div>
               </div>
               
-              <div style="float:left;width:100%;">
+              <div style="float:left;width:100%;" class="theme-table">
                 <div>
                   <div class="tabs" style="border:0 none;padding:0;">
                     <span :class="{active:tableKind==0}" @click="tableKind=0">项目成员</span>
                     <span :class="{active:tableKind==1}" @click="tableKind=1">参建单位</span>
                     <span :class="{active:tableKind==2}" @click="tableKind=2">施工许可证</span>
                     <div style="float:right;">
-                      <button @click="addTableItem()">添加</button>
-                      <button @click="dialogShow()">删除</button>
+                      <button class="theme-btn" @click="addTableItem()">添加</button>
+                      <button class="theme-btn theme-delete" @click="dialogShow()">删除</button>
                     </div>
                   </div>
                 </div>
@@ -1455,7 +1453,7 @@ a,a:active{
 }
 
 .form-item-box{
-  overflow: hidden;
+  // overflow: hidden;
   position: relative;
   padding-left: 150px;
   box-sizing: border-box;
@@ -1476,9 +1474,9 @@ a,a:active{
   left: 0;
 }
 .form-item-box>.form-input{
-  border: 1px solid #ccc;
+  // border: 1px solid #ccc;
   width: 100%;
-  padding-left: 10px;
+  // padding-left: 10px;
   box-sizing: border-box;
   line-height: 36px;
 }

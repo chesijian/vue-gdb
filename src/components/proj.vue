@@ -1,35 +1,34 @@
 <template>
   <div :class="theme">
     <div class="header">
-      <div class="top">
-        <div class="top-date" style="padding-right:10px;">
-          <span><img src="" alt=""></span>
+      <div class="header-top">
+        <div class="user-info">
           <span>{{date}}</span>
-          <div style="float: right;width: 32px;height: 32px;" @mouseover="selectShow=true" @mouseout="selectShow=false">
-            <img class="buddha" :src="sessionUtil.getUser().picture? sessionUtil.getUser().picture:defaultLogo" alt="">
+          <div @mouseover="selectShow=true" @mouseout="selectShow=false">
+            <img :src="currentUser.picture? currentUser.picture:defaultLogo" alt="">
           </div>
         </div>
          <div v-show="selectShow"  @mouseover="selectShow=true"  @mouseout="selectShow=false" class="select-show" :style="{opcity:selectShow?'1':'0',}">
-          <div style="text-align:left;">
-            <div style="width:100%;height:100%;position:relative;box-sizing:border-box">
-              <div @click="changepswPicture.dialogVisible=true" class="buddha1" style="overflow:hidden;">
-                <img  :src="sessionUtil.getUser().picture? sessionUtil.getUser().picture:defaultLogo" width="100%" height="100%" alt="">
+          <div class="picture">
+            <div>
+              <div @click="changepswPicture.dialogVisible=true" class="buddha1">
+                <img  :src="currentUser.picture? currentUser.picture:defaultLogo" width="100%" height="100%" alt="">
               </div>
-              <p style="margin-left:6px;font-size: 14px;color: #333333;font-family: PingFangSC-Medium;padding-top:12px">{{sessionUtil.getUserName()}}</p>
-              <p style="margin-left:6px;font-size: 14px;color: #999;padding-top:2px;font-size:12px;">{{sessionUtil.getUser().userId}}</p>
-              <i style="position:absolute;height:1px;width:100%;background:#E7E7E7;bottom:0;left:0px;"></i>
+              <p style="color: #333333;font-family: PingFangSC-Medium;padding-top:12px">{{sessionUtil.getUserName()}}</p>
+              <p style="color: #999;padding-top:2px;font-size:12px;">{{currentUser.userId}}</p>
+              <i></i>
             </div>
           </div>
-          <div style="cursor:pointer;" @click="changepsw()">
-            <div style="width:100%;height:100%;position:relative;box-sizing:border-box;line-height:60px;padding-left:6px">
+          <div class="password" @click="changepsw()">
+            <div>
               修改密码
-              <i style="position:absolute;height:1px;width:100%;background:#E7E7E7;bottom:0;left:0px;"></i>
+              <i></i>
             </div>
           </div>
-           <div v-if="sessionUtil.isAdmin()" style="cursor:pointer;" @click="redirectLog()">
-             <div style="width:100%;height:100%;position:relative;box-sizing:border-box;line-height:60px;padding-left:6px">
+           <div class="password" v-if="sessionUtil.isAdmin()" @click="redirectLog()">
+             <div>
                查看日志
-               <i style="position:absolute;height:1px;width:100%;background:#E7E7E7;bottom:0;left:0px;"></i>
+               <i></i>
              </div>
            </div>
           <div style="cursor:pointer;line-height:60px;padding-left:20px" @click="loginOut()">退出登录</div>
@@ -64,7 +63,6 @@
     </div>
 
     <changepsw :models="changepswObj"></changepsw>
-    <companyInfo ref="corpInfoSel" :models="companyObj"></companyInfo>
     <changePicture :models="changepswPicture"></changePicture>
 
   </div>
@@ -73,22 +71,18 @@
 <script>
 import changepsw from './changePsw.vue'
 import changePicture from './changePicture.vue'
-import companyInfo from './companyInfo.vue'
-import { Transform } from 'stream'
 import { mapMutations } from 'vuex'
 export default {
   name: 'index',
-  components:{changepsw,companyInfo,changePicture},
+  components:{changepsw,changePicture},
   data () {
     return {
       theme:'bg',
+      currentUser:{},//当前用户
       changepswObj:{
         dialogVisible:false,
       },
       changepswPicture:{
-        dialogVisible:false,
-      },
-      companyObj:{
         dialogVisible:false,
       },
       selectShow:false,
@@ -102,17 +96,11 @@ export default {
       }
   },
   created(){
+    this.currentUser=this.sessionUtil.getUser();
     this.title=this.sessionUtil.getCompanyName();
     let dates=new Date()
     this.date=dates.getFullYear()+'年'+(dates.getMonth()+1)+'月'+dates.getDate()+'日'+' 星期'+dates.formatWeek()
   },
-  // watch: {
-  //   $route(newVal) {
-  //     if(newVal.path == '/proj') {
-  //       this.activeStr='项目';
-  //     }
-  //   }
-  // },
   methods:{
     ...mapMutations([
       'setFormConfig'
@@ -123,9 +111,6 @@ export default {
     },
     changepsw(){
       this.changepswObj.dialogVisible=true;
-    },
-    editCorpInfo(){
-      this.companyObj.dialogVisible=true;
     },
       loginOut(){
         this.cookieUtil.clearSession();
@@ -143,7 +128,79 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+.header{
+  height: 104px;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  left: 0;
+  &-top{
+    height: 50px;
+    overflow: hidden;
+    color: #000;
+    .user-info{
+      float: right;
+      line-height: 50px;
+      color: #fff;
+      padding-right:10px;
+      >div{
+        float: right;
+        width: 32px;
+        height: 32px;
+      }
+      img{
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+      }
+    }
+  }
+}
+
+.select-show{
+  position: absolute;
+  right: 0px;
+  top:38px;
+  background: #fff;
+  z-index: 999;
+  font-size: 14px;
+  color: #333;
+  overflow: hidden;
+  transition: all 0.5s;
+  i{
+    position:absolute;height:1px;width:100%;background:#E7E7E7;bottom:0;left:0px;
+  }
+  >div{
+    width: 180px;
+    height: 60px;
+    padding:0 14px;
+    box-sizing: border-box;
+    text-align:left;
+  }
+  >div:hover{
+    background: #e7e7e7;
+  }
+  >div:first-child:hover{
+    background: #fff;
+  }
+  .picture{
+    >div{
+      width:100%;height:100%;position:relative;box-sizing:border-box
+    }
+    p{
+      margin-left:6px;
+      font-size: 14px;
+    }
+  }
+  .password{
+    cursor:pointer;
+    >div{
+      width:100%;height:100%;position:relative;box-sizing:border-box;line-height:60px;padding-left:6px
+    }
+  }
+}
+
 .page-box{
   width: 100%;
   height: 100%;
@@ -186,18 +243,7 @@ export default {
         padding: 0 10px;
         box-sizing: border-box;
     }
-.header{
-  height: 104px;
-  position: absolute;
-  top: 0;
-  width: 100%;
-  left: 0;
-}
-.top{
-  height: 50px;
-  overflow: hidden;
-  color: #000;
-}
+
 
 h1{
   font-size: 28px;
@@ -209,22 +255,11 @@ h1{
   width: 500px;
   margin: 0 auto;
 }
-.top-date{
-  float: right;
-  line-height: 50px;
-    color: #fff;
-}
-.buddha{
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-}
 .tabss{
   height: 54px;
   background: url(../assets/indexImg/title.png) repeat-x top center;
   position: relative;
   border: 0 none;
-  /* background-size: cover; */
   text-align: center;
 }
 span{
@@ -276,30 +311,6 @@ a,a:active{
 }
 
 
-.select-show{
-  position: absolute;
-  right: 0px;
-  top:38px;
-  background: #fff;
-  z-index: 999;
-  font-size: 14px;
-  color: #333;
-  overflow: hidden;
-  transition: all 0.5s;
-}
-.select-show>div{
-  width: 180px;
-  height: 60px;
-  padding:0 14px;
-  box-sizing: border-box;
-  text-align:left;
-}
-.select-show>div:hover{
-  background: #e7e7e7;
-}
-.select-show>div:first-child:hover{
-  background: #fff;
-}
 .buddha1{
   width: 42px;
   height: 42px;
@@ -308,6 +319,7 @@ a,a:active{
   margin-left: 6px;
   float: left;
   margin-top: 9px;
+  overflow:hidden;
 }
 .date-picker >>> .el-input__icon {
     line-height: 20px;

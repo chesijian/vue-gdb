@@ -8,11 +8,11 @@
                 <img src="../../assets/indexImg/open.png"  @click.stop.prevent="switchNode"  :style="{left:level*20+20+'px'}" alt="" v-if="models.children && models.children.length&&open">
                 <img src="../../assets/indexImg/last.png"   :style="{left:level*20+20+'px'}" style="top:15px" alt="" v-if="type==2">
                 <span style="padding:10px 0 10px 20px;display:block" :class="{checked:models.id==$store.state.selectProjectNode.id}">{{models.label?models.label:models.text}}</span>
-                <div class="button-handle" v-if="sessionUtil.isCompanyAdmin()">
+                <!-- <div class="button-handle" v-if="sessionUtil.isCompanyAdmin()">
                     <span  v-if="util.isAllowBtn('depart:btn_delete')"   @click.stop.prevent="deleteNode()" class="deleteNode" ></span>
                     <span  v-if="util.isAllowBtn('depart:btn_edit')" @click.stop.prevent="edit()" class="edit" ></span>
                     <span  v-if="util.isAllowBtn('depart:btn_add')" @click.stop.prevent="add()" class="addClass" ></span>
-                </div>
+                </div> -->
             </div>
             <div v-if="open">
                 <selectProjectItem :models="item"  :level="level+1"  v-for="(item, index) in models.children" :parents="models" :key="index"></selectProjectItem>

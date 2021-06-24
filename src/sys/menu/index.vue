@@ -9,10 +9,7 @@
             </div>
         </div>
         <div class="unit-com">
-            <el-dialog
-            title="选择菜单图标"
-            :visible.sync="uploadFlag"
-            width="350px">
+            <el-dialog title="选择菜单图标" :visible.sync="uploadFlag" width="350px">
                 <div class="menu-pic">
                     <upload
                     :config="uploadConfig"
@@ -22,7 +19,6 @@
                         <el-button size="small" @click="getMenuIcon">确定</el-button>
                     </div>
                 </div>
-
             </el-dialog>
 
             <div class="top">
@@ -31,7 +27,7 @@
                    <el-button size="mini" @click="addMenu">添加菜单</el-button>
                    <el-button size="mini" @click="removeMenu">删除菜单</el-button>
                 </h4>
-                <div class="manu-table manu-table1">
+                <div class="theme-from">
                    <div class="">
                         <el-form :inline="true" :model="ruleForm"  ref="ruleForm" label-width="100px">
                             <el-form-item label="菜单名称">
@@ -291,7 +287,6 @@ export default {
             })
         },
         handleSelectNodeClick(node){
-            //console.info("======handleNodeClick=======");
             if(node.id != this.ruleForm.id){
                 this.ruleForm.parentId = node.id;
                 this.ruleForm.parentName = node.title;
@@ -303,7 +298,6 @@ export default {
         },
         confirmSelect(){ // 关联表单确认
             let data = this.$refs['select-form'].getSelectedData();
-            console.info(data);
             if(data){
             let item = data[0];
             this.ruleForm.formKey = item['FORM_KEY_'];
@@ -623,14 +617,7 @@ export default {
   .unit-com{
     width: 70%;
   }
-.manu-table input {
-    background: transparent;
-}
-.manu-table .el-input{
-  border: 1px solid #dcdfe6;
-  border-radius: 4px;
-  height: 40px;
-}
+
 .operation {
     padding-bottom: 10px;
 }
@@ -645,39 +632,7 @@ export default {
 .title{
     position: relative;
 }
-.mask {
-    width: 100%;
-    height: 100%;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: 98;
-    background: rgba(0, 0, 0, 0.6);
-}
-.box{
-    width: 812px;
-    transform: translate(-50%,-50%);
-    position: fixed;
-    left: 50%;
-    top: 50%;
-    background: #fff;
-    border-radius: 5px ;
-    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.5);
-    height: 274px;
-    z-index: 99;
-    overflow: hidden;
-    padding: 0 20px ;
-    box-sizing: border-box;
-}
 
-
-// .top h4 .save-button{
-//     background: #3B8CFF;
-//     border: 0 none;
-//     color: #fff;
-// }
 .click-checked p{
     position: relative;
     box-sizing: border-box;
@@ -693,6 +648,7 @@ export default {
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
+    color: #fff;
 }
 .click-checked i{
     content:'';
@@ -749,13 +705,9 @@ export default {
 
 
 </style>
+
 <style>
-.manu-table .el-table__body tr.hover-row>td{
-    background: #fff;
-}
-.manu-table1.manu-table .el-table__body tr.hover-row>td,.manu-table1.manu-table .el-table__body tr.current-row>td{
-    background: #fff;
-}
+
 .unit-com .el-input--suffix .el-input__inner {
     border: 1px solid #DCDFE6;
     height: 40px!important;

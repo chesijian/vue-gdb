@@ -194,14 +194,14 @@
                                 <div class="content-button">
                                     <div class="input" style="padding-right:34px;border-color:#44d2ff;"><input style="width:100%;" type="text" @keydown.enter="loadData()" v-model="searchText" placeholder="搜索"><button style="margin:0" @click="loadData()"></button></div>
                                     <div style="float:right;">
-                                        <button  @click="addWorkflow">添加字典</button>
-                                        <button  @click="editWorkflow">修改字典</button>
-                                        <button  @click="deleteWorkflow">删除字典</button>
+                                        <button class="theme-btn"  @click="addWorkflow">添加字典</button>
+                                        <button class="theme-btn"  @click="editWorkflow">修改字典</button>
+                                        <button class="theme-btn"  @click="deleteWorkflow">删除字典</button>
                                     </div>
                                 </div>
                             </h5>
                         </div>
-                        <div class="manu-table manu-table1" ref="tableHeight2" style="height:100%;">
+                        <div class="manu-table theme-table" ref="tableHeight2" style="height:100%;">
                             <el-table ref="multipleTable" :data="manuList"  style="width: 100%" :height="tableHeightNum2"
                                 :header-row-style="{overflow:'hidden',color:'#fff',}"  border  highlight-current-row class="highlight-current-row"
                                 :row-style="{overflow:'hidden',color:'#fff',}" :cell-style="{textAlign:'center',}"  @current-change='nodeLIstShow'
@@ -253,17 +253,17 @@
                         <div style="position:relative;width:100%;" class="title clearfix ">
                             <h5 style="margin: 0;position:absolute;top:-41px;right:0;width:100%">
                                 <div style="float:right;">
-                                    <button  @click="addNode">添加字典</button>
-                                    <button  @click="saveNode">修改字典</button>
-                                    <button  @click="deleteNode">删除字典</button>
+                                    <button class="theme-btn"  @click="addNode">添加字典</button>
+                                    <button class="theme-btn" @click="saveNode">修改字典</button>
+                                    <button class="theme-btn" @click="deleteNode">删除字典</button>
                                 </div>
                             </h5>
                             <div>
                             
                             </div>
                         </div>
-                        <div class="manu-table" ref="tableHeight1" style="height:100%;">
-                            <el-table ref="multipleTable" :data="nodeList"  style="width: 100%"  :height="tableHeightNum1"
+                        <div class="manu-table theme-table" ref="tableHeight1" style="height:100%;">
+                            <el-table ref="multipleTable" :data="nodeList" :height="tableHeightNum1"
                                 :header-row-style="{overflow:'hidden',color:'#fff',}"  border  highlight-current-row class="highlight-current-row"
                                 :row-style="{overflow:'hidden',color:'#fff',}" :cell-style="{textAlign:'center',}"   @current-change='nodeSelect'
                                 :header-cell-style="{height:'34px',padding:0,textAlign:'center',color:'#fff',fontWeight:'400'}"
@@ -1029,9 +1029,7 @@ input{
 .manu-table .el-table__body tr.hover-row>td{
     background: transparent;
 }
-.manu-table1.manu-table .el-table__body tr.hover-row>td,.manu-table1.manu-table .el-table__body tr.current-row>td{
-    background: transparent;
-}
+
 .add-from-input .el-select{
     width: 100%;
 }

@@ -1,10 +1,7 @@
 <template>
     <div class="change-psw-box">
         <el-dialog title="修改头像" :visible.sync="models.dialogVisible"  width="30%">
-            <!-- <div class="block" style="text-align: center;position: relative;" @mouseover="overShow=true"  @mouseleave="overShow=false">
-                <el-avatar shape="square" :size="160" fit="fit" :src="sessionUtil.getUser().picture"></el-avatar>
-                <img style="height: 147px;width: 129px;margin-top: 27px;position: absolute;left: 139px;top: -21px;" v-show="overShow" src="../assets/indexImg/reupdata.png" alt="">
-            </div> -->
+            
             <div style="text-align: center;" @mouseover="overShow=true"  @mouseleave="overShow=false">
                 <el-upload class="avatar-uploader" :action="uploadActionUrl"
                 :show-file-list="false"

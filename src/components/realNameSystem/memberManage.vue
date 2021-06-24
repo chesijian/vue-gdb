@@ -2002,12 +2002,7 @@
 		width: 277px;
 		border-radius: 5px;
 	}
-	 .box_index .el-input--suffix .el-input__inner{
-			border: 1px solid #dcdfe6;
-			width: 278px;
-			border-radius: 5px;
-			padding: 5px;
-	}
+	
   .box_index .date .el-input__inner {
     padding-left: 30px !important;
   }

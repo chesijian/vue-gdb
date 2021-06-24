@@ -290,8 +290,6 @@ export default {
     methods: {
         loadData(){
              this.util.restGet('/api_v1/construction/realNameSystem/corpInfo',null,(res)=>{
-                console.log("corpInfo===",res)
-                console.log("legalManIDCardNumber==="+res.data.legalManIdcardNumber)
                 if(res.status==200&&res.data){
                 	console.log('res.data',res.data)
                     this.mainData=res.data
@@ -375,11 +373,6 @@ export default {
 		width: 277px;
 		border-radius: 5px;
 	}
-	 .box_index .el-input--suffix .el-input__inner{
-			border: 1px solid #dcdfe6;
-			width: 278px;
-			border-radius: 5px;
-			padding: 5px;
-	}
+	
 </style>
 

@@ -169,6 +169,24 @@ export const Api=function(){
     this.unmask = function() {
         this.mask().close()
     }
+    this.warn = function(msg) {
+        Message({
+            message: msg,
+            showClose: true,
+            customClass: 'alert-Message-customClass',
+            duration: '2000',
+            type: 'warning'
+        });
+    };
+    this.error = function(msg) {
+        Message.error({
+            message: msg == undefined ? '数据返回异常!' : msg,
+            showClose: true,
+            customClass: 'alert-Message-customClass',
+            duration: '2000',
+            type: "success"
+        });
+    };
     
 }
 
