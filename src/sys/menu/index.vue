@@ -73,12 +73,12 @@
                             <el-input v-model="ruleForm.params"></el-input>
                           </el-form-item>
                           <el-form-item label="菜单类型">
-                            <el-select v-model="ruleForm.types"  placeholder="请选择菜单类型" style=" width:202px">
-                              <el-option label="菜单" value="menu"></el-option>
-                              <el-option label="报表" value="report"></el-option>
-                              <el-option label="应用" value="application"></el-option>
+                            <el-select v-model="ruleForm.type"  placeholder="请选择菜单类型" style=" width:202px">
+                              <el-option label="首页" value="index"></el-option>
+                              <el-option label="项目" value="project"></el-option>
+                              <!-- <el-option label="应用" value="application"></el-option>
                               <el-option label="模块" value="module"></el-option>
-                              <el-option label="分组" value="group"></el-option>
+                              <el-option label="分组" value="group"></el-option> -->
                             </el-select>
                           </el-form-item>
                             <el-form-item label="前端路由">
@@ -273,8 +273,8 @@ export default {
     },
     methods:{
         loadAsideData(node){
-            var parentId= this.sessionUtil.getAppId()
-            this.util.restGet('/api_v1/org/menus',{parentId:parentId,isDeep: true,isFilter:false},(res)=>{
+            // var parentId= this.sessionUtil.getAppId()
+            this.util.restGet('/api_v1/org/menus',{parentId:"root",isDeep: true,isFilter:false},(res)=>{
                 if(res.status==200){
                     this.digui(res.data)
                     if(node){
@@ -375,7 +375,7 @@ export default {
                         mobilePath:this.ruleForm.authList[i].mobilePath,
                         sort:this.ruleForm.authList[i].sort,
                         title:this.ruleForm.authList[i].title,
-                        type:this.ruleForm.authList[i].types,
+                        type:this.ruleForm.authList[i].type,
                         uri:this.ruleForm.authList[i].uri,
                       authParams:this.ruleForm.authList[i].authParams,
                         icon: this.ruleForm.authList[i].icon,
@@ -396,7 +396,7 @@ export default {
                 formKey:this.ruleForm.formKey,
                 parentId:this.ruleForm.parentId,
                 sort:this.ruleForm.sort,
-                type:this.ruleForm.types,
+                type:this.ruleForm.type,
                 authList:arr,
                 saveAuths:true,
                 app: this.ruleForm.app,
@@ -431,7 +431,7 @@ export default {
                         mobilePath:this.ruleForm.authList[i].mobilePath,
                         sort:this.ruleForm.authList[i].sort,
                         title:this.ruleForm.authList[i].title,
-                        type:this.ruleForm.authList[i].types,
+                        type:this.ruleForm.authList[i].type,
                         uri:this.ruleForm.authList[i].uri,
                       authParams:this.ruleForm.authList[i].authParams,
                         icon: this.ruleForm.authList[i].icon,
@@ -453,7 +453,7 @@ export default {
                 params:this.ruleForm.params,
                 parentId:this.ruleForm.parentId,
                 sort:this.ruleForm.sort,
-                type:this.ruleForm.types=='菜单'?'menu':this.ruleForm.types=='报表'?'report':this.ruleForm.types=='应用'?'application':this.ruleForm.types=='分组'?'group': this.ruleForm.types,
+                type:this.ruleForm.type,
                 authList:arr,
                 saveAuths:true,
                 app: this.ruleForm.app,
@@ -516,7 +516,6 @@ export default {
                 if(res.status==200){
                     if(res.data) {
                         res.data.enable==0?res.data.enable=false:res.data.enable=true;
-                        res.data.type=='menu'?res.data.types='菜单':res.data.type=='report'?res.data.types='报表':res.data.type=='application'?res.data.types='应用':res.data.types='分组';
                         if(res.data.authList){
                           res.data.authList.forEach(item=>{
                             item.isEdit = true

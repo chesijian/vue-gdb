@@ -14,7 +14,8 @@
                     <input type="password" v-model="passworld" placeholder="请输入您的密码">
                 </div>
               <div class="deng2">
-                <input type="text" name="vCode"  v-model="code" placeholder="请输入验证码"  style="padding-left: 10px;"/><img  :src="vcodeUrl" @click="changeVCode()">
+                <input type="text" name="vCode"  v-model="code" placeholder="请输入验证码"  style="width: 200px;padding-left: 10px;border-top-right-radius: 0;border-bottom-right-radius: 0"/>
+                <img  :src="vcodeUrl" @click="changeVCode()">
               </div>
                 <!-- <el-form ref="form" :model="form" size="mini" class="form-wrap">
                     <el-form-item>

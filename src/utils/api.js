@@ -178,6 +178,16 @@ export const Api=function(){
             type: 'warning'
         });
     };
+    this.success = function(msg) {
+        //Message.success(msg);
+        Message.success({
+            message: msg,
+            showClose: true,
+            duration: '2000',
+            customClass: 'alert-Message-customClass',
+            type: "success"
+        });
+    };
     this.error = function(msg) {
         Message.error({
             message: msg == undefined ? '数据返回异常!' : msg,
@@ -187,7 +197,47 @@ export const Api=function(){
             type: "success"
         });
     };
-    
+    this.initSysMenus=function(){
+        this.restGet('/api_v1/org/menus',{parentId:"root",isDeep: true},(res)=>{
+            if(res.status==200){
+                let routers=this.formatRouter(res.data);
+                // router.addRoutes(routers);            
+                this.models=res.data
+            }
+        })
+    }
+    this.formatRouter=function(routers){
+        let indexRoute={
+            path: '/index',
+            name: 'index',
+            meta: {
+                title: '首页'
+            },
+            component: resolve => require(['@/components/proj.vue'], resolve),
+        }
+        let routerList=[];
+        routers.forEach(item=>{
+            let {
+                path,
+                title,
+                uri
+            }=item;
+            let router={
+                path,
+                meta: {
+                    title
+                },
+                component(resolve){
+                    // require([`@/${uri}.vue`], resolve);
+                }
+                // component: resolve => require([`@/${uri}.vue`], resolve),
+            }
+            routerList.push(router);
+        });
+        indexRoute.children=routerList
+        return [indexRoute];
+        console.log("routerList=========>",routerList);
+    }
 }
 
 export const util = new Api();

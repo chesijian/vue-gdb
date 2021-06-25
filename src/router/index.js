@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import index from '@/components/index'
-import { util, cookieUtil } from '@/utils/utils.js'
+import { util } from '@/utils/api.js'
 import sys from './sys/sys'
 Vue.use(Router)
 
@@ -53,7 +53,7 @@ const router = new Router({
                             path: 'form/query/:formKey',
                             name: 'form-query',
                             meta: {
-                            // title: '表单查询'
+                            title: '表单查询'
                             },
                             component: () => import('@/common/form/form-view/form-view.vue')
                         },
@@ -178,7 +178,7 @@ const router = new Router({
                             path: 'form/query/:formKey',
                             name: 'form-query',
                             meta: {
-                            // title: '表单查询'
+                            title: '表单查询'
                             },
                             component: () => import('@/common/form/form-view/form-view.vue')
                         },
@@ -369,13 +369,6 @@ const router = new Router({
                     path: 'material',
                     component: resolve => require(['@/components/material/PageIndex.vue'], resolve),
                     children: [
-                        // {
-                        //     path: '',
-                        //     meta: {
-                        //         title: '首页'
-                        //     },
-                        //     component: resolve => require(['@/components/material/MeasuredIndex.vue'], resolve)
-                        // },
                         {
 					      path: 'form/query/:formKey',
 					      name: 'form-query',
@@ -725,22 +718,6 @@ const router = new Router({
                     },
                     component: resolve => require(['@/components/document-manage/index.vue'], resolve),
                 },
-                // {
-                //     path: 'spreadForm/query/:formKey',
-                //     name: 'spreadForm-query',
-                //     meta: {
-                //        title: '报表设计'
-                //     },
-                //     component: resolve => require(['@/views/FeatureDrillDown/Design.vue'], resolve),
-                // },
-                // {
-                //     path: 'spreadForm/view/:formKey',
-                //     name: 'spreadForm-view',
-                //     meta: {
-                //        title: '预览报表'
-                //     },
-                //     component: resolve => require(['@/views/report/index.vue'], resolve),
-                // },
                 {
                     path: 'form/query/:formKey',
                     name: 'form-query',
@@ -840,7 +817,7 @@ router.beforeEach((to, from, next) => {
     if(to.meta.title){
         document.title = to.meta.title;
     }
-    
+    // util.initMenus();
     // util.mask('正在跳转..')
     if (to.path == '/login'||to.path == '/register') {
         next()

@@ -41,7 +41,6 @@
           <div v-if="sessionUtil.isAllowMenu('0501')"><router-link tag="span" active-class="active"  to="/proj/report">集团报表</router-link></div>
           <div v-if="sessionUtil.isAllowMenu('0201')"><router-link tag="span" :class="{active:$route.path=='/proj'}" to="/proj">项目</router-link></div>
           <div v-if="sessionUtil.isAllowMenu('SYS_08')||sessionUtil.isAllowMenu('SYS_07')" ><router-link tag="span"  :class="{active:$route.path.substring(0,13)=='/proj/library'}"  to="/proj/library/form/query/t_gdb_jcbzk">企业库</router-link></div>
-      		<!-- <div><router-link tag="span" v-if="sessionUtil.isAllowMenu('SYS_09')"  style="width: 110px;backgroundSize: 110px 25px;"  :class="{active:$route.path=='/proj/form/query/t_gt_project_sgjhmb'}"  to="/proj/form/query/t_gt_project_sgjhmb">进度计划模板</router-link></div> -->
       		<div v-if="sessionUtil.isAllowMenu('SYS_09')"><router-link tag="span"  style="width: 110px;backgroundSize: 110px 25px;"  active-class="active"  to="/proj/documentManage">文档模板管理</router-link></div>
 
         </div>
@@ -158,6 +157,61 @@ export default {
   }
 }
 
+.tabss{
+  height: 54px;
+  background: url(../assets/indexImg/title.png) repeat-x top center;
+  position: relative;
+  border: 0 none;
+  text-align: center;
+}
+span{
+    color: #fff;
+}
+.tabsspan{
+	width: 100px !important;
+}
+.tabss .tabs-left{
+  position: absolute;left: 10px;
+  z-index: 1;
+}
+.tabss .tabs-right{
+  position: absolute;right: 10px;
+  z-index: 1;
+
+}
+
+.tabss .tabs-left>div{
+  font-size: 14px;
+  float: left;
+}
+.tabss .tabs-right>div{
+  font-size: 14px;
+  float: right;
+}
+
+.tabss>div>div span{
+  display: block;
+  margin: 5px 0;
+  padding: 3px 11px;
+  width: 78px;
+  box-sizing: border-box;
+}
+
+.tabss .tabs-left>div .active{
+  background: url(../assets/indexImg/tabs-left.png) no-repeat  top center;
+}
+ .actives{
+  background: url(../assets/indexImg/select.png) no-repeat  top center;
+  background-size: 100px 27px !important;
+}
+.tabss .tabs-right>div .active{
+  background: url(../assets/indexImg/tabs-right.png) no-repeat  top center
+}
+a,a:active{
+  color: #fff;
+  text-decoration: none;
+}
+
 .select-show{
   position: absolute;
   right: 0px;
@@ -254,60 +308,6 @@ h1{
   text-align: center;
   width: 500px;
   margin: 0 auto;
-}
-.tabss{
-  height: 54px;
-  background: url(../assets/indexImg/title.png) repeat-x top center;
-  position: relative;
-  border: 0 none;
-  text-align: center;
-}
-span{
-    color: #fff;
-}
-.tabsspan{
-	width: 100px !important;
-}
-.tabss .tabs-left{
-  position: absolute;left: 10px;
-  z-index: 1;
-}
-.tabss .tabs-right{
-  position: absolute;right: 10px;
-  z-index: 1;
-
-}
-
-.tabss .tabs-left>div{
-  font-size: 14px;
-  float: left;
-}
-.tabss .tabs-right>div{
-  font-size: 14px;
-  float: right;
-}
-
-.tabss>div>div span{
-  display: block;
-  margin: 5px 0;
-  padding: 3px 11px;
-  width: 78px;
-  box-sizing: border-box;
-}
-
-.tabss .tabs-left>div .active{
-  background: url(../assets/indexImg/tabs-left.png) no-repeat  top center;
-}
- .actives{
-  background: url(../assets/indexImg/select.png) no-repeat  top center;
-  background-size: 100px 27px !important;
-}
-.tabss .tabs-right>div .active{
-  background: url(../assets/indexImg/tabs-right.png) no-repeat  top center
-}
-a,a:active{
-  color: #fff;
-  text-decoration: none;
 }
 
 
