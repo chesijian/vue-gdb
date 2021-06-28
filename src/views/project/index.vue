@@ -653,7 +653,7 @@
 <script>
 import { getDataByApi } from '@/api/api'
 import selectMember from '@/components/common/selectMember.vue'
-import uploading from '@/common/upload/upload.vue'
+import uploading from '@/components/common/uploading.vue'
 import ChooseAddress from '@/components/common/ChooseAddress.vue'
 import { mapMutations } from 'vuex'
 export default {

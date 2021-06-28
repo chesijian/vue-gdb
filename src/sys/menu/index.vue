@@ -218,7 +218,7 @@
 import {mapState} from 'vuex'
 import treeItem from '@/components/common/treeItem.vue'
 import {tableMixin} from '../../public/js/mixins.js'
-import upload from '../../common/upload/upload'
+import upload from '@/components/common/upload/upload'
 export default {
     mixins:[tableMixin],
     data(){

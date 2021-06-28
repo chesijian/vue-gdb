@@ -4,12 +4,7 @@
     <selectRole :selectRoleModels="selectRoleModels"></selectRole>
     <selectPosition :selectPositionModels="selectPositionModels"></selectPosition>
     <selectUser :selectMemberModels="selectUserModels"></selectUser>
-    <!-- <div v-if="ismask">
-      <selectQuarters :models="orgDatas" @selectQuarterOut="selectQuarterIn" :selectType="selectType"></selectQuarters>
-    </div>
-    <div v-if="memberOrPost">
-      <selectmore :models="selectmoreObj" @selectQuarterOut="selectMoreIn" :selectType="selectmoreObj.selectType" ></selectmore>
-    </div> -->
+    
     <div v-if="isDelete" class="delete-show-box">
       <div class="delete-show">
         <h5 style="font-size:18px;margin:30px 0;font-weight:400" >删除{{removeNode.title}}</h5>
@@ -62,18 +57,14 @@
             :class="{active:activeName=='岗位管理'}">
           岗位管理
         </span>
-              <!--<span @click="changetab('公司信息')" v-if="sessionUtil.isAllowBtn('010106:view')"
-            :class="{active:activeName=='公司信息'}">
-      	    公司信息
-        </span>-->
+              
       </div>
     </div>
 
-    <div class="enter-setion"
-         style="background:#fff;padding:30px;box-sizing: border-box;box-shadow: 0 2px 5px 0 rgba(0,0,0,0.10);overflow:auto;"
-         v-show="addOrganization||addPeople">
-      <div class="back" @click="back()">
-        <button>返回上一级</button>
+    <!-- 人员、部门新增编辑框 -->
+    <div class="content-item edit" v-show="addOrganization||addPeople">
+      <div>
+        <button class="theme-btn primary" @click="back()">返回上一级</button>
       </div>
       <div v-show="addOrganization">
         <h5 style="font-size:18px;margin:30px 0;font-weight:400" >部门信息</h5>
@@ -170,13 +161,7 @@
         <h5 style="font-size:18px;margin:10px 0 10px;font-weight:400;width: 694px" >部门岗位
             <button class="add-edit-depart" @click="selectDepart()"></button>
         </h5>
-           <!-- <div style="padding:0 0 10px;">所属部门</div>
-          <ul>
-            <li class="gain-button" @click="selectDepart()">请选择</li>
-            <li class="gain-button gain-button1" v-for="(item,key) in departList" :key="key" @click="shanchu(item,0)"
-                :style="{color:bgColor,background:fontColor,borderColor:bgColor}">{{item.label}}
-            </li>
-          </ul> -->
+           
           <el-table  :data="departList" :stripe="true" style="width: 694px"
               :header-row-style="{background:fontColor,overflow:'hidden',}" border
               :row-style="{overflow:'hidden',}" :cell-style="{textAlign:'center',}"
@@ -247,7 +232,7 @@
         <button style="color:#666;background:#fff;" @click="reset">重置</button>
       </div>
     </div>
-    <div class="enter-setion enter-setion1" v-if="activeName=='组织管理'&&!addOrganization&&!addPeople">
+    <div class="content-item enter-setion1" v-if="activeName=='组织管理'&&!addOrganization&&!addPeople">
       <div class="box-style enter-setion-ul" v-if="sessionUtil.isAllowMenu('SYS_01')"  style="box-sizing:border-box;">
          <div  style="position:relative;padding-top:57px;">
           <div class="enter-setion-title" style="height:108px;position:absolute;left:0;top:0;width:100%;padding: 10px;box-sizing: border-box;">
@@ -268,9 +253,10 @@
             <div style="width:100%;overflow-x:auto;position:absolute;top:60px;left:10px;">
               <div class="operations">
                 <div>
+                  <button class="theme-btn" @click="SyncWeChat()">微信同步</button>
                   <button class="theme-btn" @click="addmember()" v-if="sessionUtil.isAllowAdd('org_Structure')">添加成员</button>
                   <button class="theme-btn" v-if="sessionUtil.isAllowBtn('010102:change_psw')" @click="changePsw()">修改密码</button>
-                  <button class="theme-btn theme-delete" v-if="sessionUtil.isAllowDelete('org_Structure')" @click="removeMember()">删除</button>
+                  <button class="theme-btn danger" v-if="sessionUtil.isAllowDelete('org_Structure')" @click="removeMember()">删除</button>
                 </div>
                 <div class="search-box">
                   <input type="text" v-model="search" @keyup.enter="seachUsers()" placeholder="请输入关键字搜索">
@@ -278,7 +264,7 @@
                     <img src="../../assets/administrationIcon/search.png" alt="">
                   </button>
                 </div>
-                <!-- <button v-if="sessionUtil.isAllowBtn('010102:up_wx_data')" @click="SyncWeChat()">微信同步</button> -->
+                
                 
                 
               </div>
@@ -338,26 +324,25 @@
         </div>
       </div>
     </div>
-    <div class="enter-setion" v-if="activeName=='角色管理'">
+    <div class="content-item" v-if="activeName=='角色管理'">
       <RoleManage ref="roleLoadData"></RoleManage>
     </div>
 
-    <div class="enter-setion" v-if="activeName=='岗位管理'">
+    <div class="content-item" v-if="activeName=='岗位管理'">
       <PostManage></PostManage>
     </div>
-     <div class="enter-setion" v-if="activeName=='公司信息'">
+     <div class="content-item" v-if="activeName=='公司信息'">
       <CompanyInfo></CompanyInfo>
     </div>
-    <!-- <div class="enter-setion" v-show="activeName=='菜单管理'">
-        <ListManage></ListManage>
-    </div> -->
+    
   </div>
 </template>
 <script>
   import {mapState, mapGetters, mapActions} from 'vuex'
   import selectQuarters from '../common/selectQuerters.vue'
   import selectPosition from "../common/select-position/select-position.vue";
-  import selectRole from '../../common/select-role/select-role.vue'
+  import selectRole from '../common/selectRole.vue'
+  // import selectRole from '../../common/select-role/select-role.vue'
   import selectUser from '../common/selectMember.vue'
   import enterprisesSetItem from './enterprisesSetItem.vue'
   import uploading from '../common/uploading.vue'
@@ -1158,11 +1143,13 @@
     cursor: pointer;
   }
 
-  .enter-setion {
+  .content-item {
     width: 100%;
     height: 100%;
   }
-
+  .content-item.edit{
+    background:#fff;padding:30px;box-sizing: border-box;box-shadow: 0 2px 5px 0 rgba(0,0,0,0.10);overflow:auto;
+  }
   .enter-setion1 .enter-setion-ul {
     width: 320px;
     margin-right: 10px;
@@ -1259,14 +1246,7 @@
     background-size: 100%
   }
 
-  .back button {
-    width: 102px;
-    height: 28px;
-    line-height: 28px;
-    border: 1px solid #666666;
-    background: #FFFFFF;
-    color: #666;
-  }
+ 
 
   .gain {
     border-bottom: 1px solid #E7E7E7;
@@ -1279,6 +1259,7 @@
   .gain input, .gain p, .gain select {
     border: 0 none;
     width: 100%;
+    outline: none;
     margin: 10px 0px;
     height: 15px;
     line-height: 15px;
@@ -1496,23 +1477,7 @@
   .gain .el-radio__input.is-checked + .el-radio__label {
     color: #333;
   }
-   .bg .enter-setion .el-pager li.active{
-     color: #409eff;
-   }
-  .bg .enter-setion .el-dialog,.bg .enter-setion .el-pager li{
-    background:transparent;
-    color: #fff;
-  }
-  .bg .enter-setion .el-pagination .btn-next,.bg .enter-setion  .el-pagination .btn-prev{
-    background:transparent;
-  }
-.bg .enter-setion .el-table--border, .bg .enter-setion .el-table--group, .bg .enter-setion .el-table td, .bg .enter-setion .el-table th.is-leaf{
-  border-color:#44d2ff;
-  color:#fff;
-  }
-  .bg .enter-setion .el-table--border:after, .bg .enter-setion .el-table--group:after, .bg .enter-setion .el-table:before{
-    background: #44d2ff;
-  }
+ 
 .bg .edit-people .el-table--border, .bg .edit-people .el-table--group, .bg .edit-people .el-table td, .bg .edit-people .el-table th.is-leaf,.bg .edit-people .el-input__inner{
   border-color:#44d2ff;
   color:#333;
@@ -1530,7 +1495,5 @@
    .bg .enter-box .el-table__fixed-right:before,.bg .enter-box  .el-table__fixed:before{
     background: #44d2ff;
    }
-  /* .gain .el-table td{
-    padding:0
-  } */
+ 
 </style>

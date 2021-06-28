@@ -8,7 +8,6 @@ import { validUtil, cookieUtil } from '@/utils/utils.js'
 import {sessionUtil} from './utils/sessionUtil'
 import '@/public/css/zzStyle.css'
 import '@/public/css/themeStyle.scss'
-// import '@/public/js/easy-player-element.min.js'
 require('./mock/index')
 import store from './store'
 import ElementUI from 'element-ui'
@@ -27,24 +26,18 @@ import 'quill/dist/quill.core.css'
 import 'quill/dist/quill.snow.css'
 import 'quill/dist/quill.bubble.css'
 
-
+// import { initSysMenus } from '@/utils/menus.js'
 
 import FormView from '@/common/form/form-view/form-view'
 import FormEdit from '@/common/form/form-edit/form-edit'
 import GridTreeTable from '@/common/form/grid-tree-table/grid-tree-table'
-// import GridTable from '@/common/form/grid-table/grid-table'
-// import SimpleTreeTable from '@/common/form/tree-table/tree-table'
 import EditTable from '@/common/form/edit-table/edit-table'
 import Tree from '@/common/form/tree/tree'
 import TreeTable from 'tree-table-vue'
 
-// import VCharts from 'v-charts'
-
 Vue.component('form-view', FormView);
 Vue.component('form-edit', FormEdit);
 Vue.component('grid-tree-table', GridTreeTable)
-    // Vue.component('grid-table', GridTable);
-    // Vue.component('sp-tree-table', SimpleTreeTable);
 Vue.component('edit-table', EditTable);
 Vue.component('tree', Tree);
 
@@ -110,7 +103,29 @@ Vue.component('remote-script', {
         }
     }
 });
-
+router.beforeEach((to, from, next) => {
+    if(to.meta.title){
+        document.title = to.meta.title;
+    }
+    
+    // util.mask('正在跳转..')
+    if (to.path == '/login'||to.path == '/register') {
+        next()
+        util.unmask()
+    } else {
+        // initSysMenus(router,store);
+        next()
+            util.unmask()
+        // if (cookieUtil.validToken()) { // 如果有就直接到首页
+ 		// 	next()
+        //     util.unmask()
+        // } else {
+        //     util.error('没有获取到用户信息');
+        //     next('/login');
+        //     util.unmask()
+        // }
+    }
+})
 /* eslint-disable no-new */
 new Vue({
     el: '#app',

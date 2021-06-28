@@ -37,21 +37,21 @@
       </div>
       <div class="tabss">
         <div class="tabs-left">
-          <div v-if="sessionUtil.isAllowMenu('0301')" ><router-link tag="span" active-class="active"  to="/proj/largeScreen">集团大屏</router-link></div>
-          <div v-if="sessionUtil.isAllowMenu('0501')"><router-link tag="span" active-class="active"  to="/proj/report">集团报表</router-link></div>
-          <div v-if="sessionUtil.isAllowMenu('0201')"><router-link tag="span" :class="{active:$route.path=='/proj'}" to="/proj">项目</router-link></div>
+          <div v-if="sessionUtil.isAllowMenu('0301')" ><router-link tag="span" active-class="active"  to="/index/largeScreen">集团大屏</router-link></div>
+          <div v-if="sessionUtil.isAllowMenu('0501')"><router-link tag="span" active-class="active"  to="/index/report">集团报表</router-link></div>
+          <div v-if="sessionUtil.isAllowMenu('0201')"><router-link tag="span" :class="{active:$route.path=='/index/project'}" to="/index/project">项目</router-link></div>
           <div v-if="sessionUtil.isAllowMenu('SYS_08')||sessionUtil.isAllowMenu('SYS_07')" ><router-link tag="span"  :class="{active:$route.path.substring(0,13)=='/proj/library'}"  to="/proj/library/form/query/t_gdb_jcbzk">企业库</router-link></div>
       		<div v-if="sessionUtil.isAllowMenu('SYS_09')"><router-link tag="span"  style="width: 110px;backgroundSize: 110px 25px;"  active-class="active"  to="/proj/documentManage">文档模板管理</router-link></div>
 
         </div>
         <div class="tabs-right">
-          <div><router-link tag="span" v-if="sessionUtil.isAllowMenu('SYS_01')"  active-class="active" to="/proj/enterprisesSet" >组织架构</router-link></div>
-          <div><router-link tag="span" v-if="sessionUtil.isAllowMenu('SYS_90')" active-class="active"  to="/proj/dataDictionary">数据字典</router-link></div>
+          <div><router-link tag="span" v-if="sessionUtil.isAllowMenu('SYS_01')"  active-class="active" to="/index/enterprisesSet" >组织架构</router-link></div>
+          <div><router-link tag="span" v-if="sessionUtil.isAllowMenu('SYS_90')" active-class="active"  to="/index/dataDictionary">数据字典</router-link></div>
           <div><router-link tag="span" v-if="sessionUtil.isAllowMenu('SYS_05')"  active-class="active"  to="/sys/org/auth-config">角色授权</router-link></div>
           <div><router-link tag="span" v-if="sessionUtil.isAllowMenu('SYS_05')"  active-class="active"  to="/proj/form/query/t_product_type">产品类型</router-link></div>
           <div><router-link tag="span" v-if="sessionUtil.isAllowMenu('SYS_05')"  active-class="active"  to="/form/query/t_setup_project">项目立项</router-link></div>
           <div><router-link tag="span" v-if="sessionUtil.isAdmin()" active-class="active"  to="/form/view/form-list">表单管理</router-link></div>
-          <div><router-link tag="span" v-if="sessionUtil.isAdmin()" active-class="active"  to="/sys/menu/manage">菜单管理</router-link></div>
+          <div><router-link tag="span" v-if="sessionUtil.isAdmin()" active-class="active"  to="/index/menu/manage">菜单管理</router-link></div>
           <div><router-link tag="span" v-if="sessionUtil.isAdmin()"  active-class="active" to="/sys/wf/manage" >流程配置</router-link></div>
         </div>
       </div>

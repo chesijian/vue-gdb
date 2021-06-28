@@ -1,4 +1,3 @@
-// import {formUtil} from '../form'
 
 // eslint-disable-next-line no-unused-vars
 import {getConfig} from '@/api/form-render'
@@ -100,15 +99,14 @@ export const mixin = {
 
   },
   mounted () {
-    let _this = this
-    _this.cascadeShow = false
-    _this.cascadeTwoShow = false
-    _this.cascadeThreeShow = false
-    _this.queryShow = false
-    _this.formShow = false
-    _this.queryFormShow = false
-    _this.routeQuery = null
-    _this.queryForm = {
+    this.cascadeShow = false
+    this.cascadeTwoShow = false
+    this.cascadeThreeShow = false
+    this.queryShow = false
+    this.formShow = false
+    this.queryFormShow = false
+    this.routeQuery = null
+    this.queryForm = {
       1: {
         show: false
       },
@@ -121,39 +119,34 @@ export const mixin = {
     }
     let width = document.body.clientWidth
     this.width = width
-    _this.queryFormCount = 0
-    _this.formKey = ''
-    // console.info(this);
+    this.queryFormCount = 0
+    this.formKey = ''
     // 判断是否是选择，且配置的是选择目录
     this.init()
     // 判断是否是选择弹框，而且是单页面
-    // console.info(this.formConfig);
   },
   methods: {
     ...mapMutations([
       'setFormConfig'
     ]),
     init () {
+      console.log("表单初始化=========>>>>");
       let _this = this
       if (this.config && this.config !== undefined && this.config.title !== undefined) {
         this.cascadeShow = false
-        // console.info('----------');
         this.queryForm[1] = this.config
         // 把当前组件传递给子组件
         this.queryForm[1].parent = this
         this.selectCatalog = true
         this.singleQuery = true
-        _this.queryFormCount = 1
+        this.queryFormCount = 1
       } else {
         let formKey = this.selectFormKey
-        // console.info('formKey-----1----'+formKey);
-        // console.info(this.queryParams)
         // 判断是否是选择弹框，而且配置的是关联表单
         if (!this.validUtil.isNotNull(formKey)) {
           formKey = this.$route.params.formKey
           // 获取路由中查询参数，一般用于打开菜单或者表单时传参
-          let routeQuery = _this.getRouteQuery()
-          // console.log('------1-------',routeQuery,this.urlShowCheckBox)
+          let routeQuery = this.getRouteQuery()
           if (routeQuery.assignShowCheckBox) {
             this.urlAssignShowCheckBox = {...routeQuery.assignShowCheckBox}
             delete routeQuery.assignShowCheckBox
@@ -162,13 +155,10 @@ export const mixin = {
             this.urlShowCheckBox = routeQuery.showCheckBox
             delete routeQuery.showCheckBox
           }
-          // console.log('------2-------',routeQuery,this.urlShowCheckBox)
-          _this.routeQuery = routeQuery
-          // console.info(_this.routeQueryParams)
+          this.routeQuery = routeQuery
         }
         // 判断是否直接打开表单
-        // console.info('formKey----2-----'+formKey);
-
+        console.log("判断是否直接打开表单======>>>");
         getConfig(formKey, this).then(data => {
           let formConfig = {}
           for (var key in data) {
@@ -177,9 +167,9 @@ export const mixin = {
           if (formConfig) this.selectFormTitle = formConfig.title
           if (formConfig.width && !(formConfig.width.indexOf('px') > -1) && !(formConfig.width.indexOf('%') > -1)) formConfig.width = formConfig.width + 'px'
           if (formConfig.height && !(formConfig.height.indexOf('px') > -1) && !(formConfig.height.indexOf('%') > -1)) formConfig.height = formConfig.height + 'px'
-          _this.formConfig = formConfig
-          _this.$emit('on-load', formConfig)
-          var type = _this.$route.path.split('/')[2]
+          this.formConfig = formConfig
+          this.$emit('on-load', formConfig)
+          var type = this.$route.path.split('/')[2]
           if (type) {
             if (type === 'query') {
               this.queryFormShow = true
@@ -230,7 +220,6 @@ export const mixin = {
             deepForms = this.getTreeChild(deepForms, deepFormChildren, level)
           }
           // 默认第一层
-          console.log(deepForms)
           this.queryForm[1] = deepForms[0]
           let children = this.queryForm[1].children
           let assignShowCheckBox = this.validUtil.emptyObj(this.urlAssignShowCheckBox) ? this.assignShowCheckBox : this.urlAssignShowCheckBox

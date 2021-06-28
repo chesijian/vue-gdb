@@ -1,5 +1,5 @@
 /* eslint-disable eqeqeq */
-import {util} from '@/utils/utils'
+import {util} from '@/utils/api'
 
 /**
  * 加载列表数据

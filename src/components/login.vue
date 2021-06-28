@@ -194,7 +194,7 @@
                     // _this.$store.state.userId = _this.sessionUtil.getUserId();
                     // _this.$store.state.companyUid = _this.sessionUtil.getCompanyUid();
                     if(this.loginType==0){
-                        this.$router.push({ path: '/proj' })
+                        this.$router.push({ path: '/index/project' })
 
                         // window.location.href="http://yun.zhuzhu.biz:8081/gdb/static/platform/index.html#/proj"
                     }else{

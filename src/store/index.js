@@ -9,6 +9,7 @@ import getters from './getters'
 
 const state = {
 	session:null,
+	routers:[],
 	defaultLogo:require('@/assets/sflogo.jpg'),
 	temp:null,
 	departName: '',

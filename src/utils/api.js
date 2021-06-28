@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Loading,Message } from 'element-ui';
+import { Loading,Message,MessageBox } from 'element-ui';
 import router from '../router'
 import store from '../store'
 import {sessionUtil} from './sessionUtil'
@@ -169,6 +169,15 @@ export const Api=function(){
     this.unmask = function() {
         this.mask().close()
     }
+    this.confirm = function(msg, title, callBack) {
+        MessageBox.confirm(msg, title == undefined ? "提示" : title, {
+            type: "warning"
+        }).then(() => {
+            callBack();
+        }).catch(() => {
+
+        });
+    };
     this.warn = function(msg) {
         Message({
             message: msg,
@@ -197,47 +206,7 @@ export const Api=function(){
             type: "success"
         });
     };
-    this.initSysMenus=function(){
-        this.restGet('/api_v1/org/menus',{parentId:"root",isDeep: true},(res)=>{
-            if(res.status==200){
-                let routers=this.formatRouter(res.data);
-                // router.addRoutes(routers);            
-                this.models=res.data
-            }
-        })
-    }
-    this.formatRouter=function(routers){
-        let indexRoute={
-            path: '/index',
-            name: 'index',
-            meta: {
-                title: '首页'
-            },
-            component: resolve => require(['@/components/proj.vue'], resolve),
-        }
-        let routerList=[];
-        routers.forEach(item=>{
-            let {
-                path,
-                title,
-                uri
-            }=item;
-            let router={
-                path,
-                meta: {
-                    title
-                },
-                component(resolve){
-                    // require([`@/${uri}.vue`], resolve);
-                }
-                // component: resolve => require([`@/${uri}.vue`], resolve),
-            }
-            routerList.push(router);
-        });
-        indexRoute.children=routerList
-        return [indexRoute];
-        console.log("routerList=========>",routerList);
-    }
+    
 }
 
 export const util = new Api();

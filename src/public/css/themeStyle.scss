@@ -57,9 +57,17 @@
     color: #409eff;
     border-color: #c6e2ff;
 }
-.theme-delete{
+.theme-btn.danger{
     background: rgb(229,96,72);
 }
+.theme-btn.primary {
+    // width: 102px;
+    // height: 28px;
+    // line-height: 28px;
+    border: 1px solid #666666;
+    background: #FFFFFF;
+    color: #666;
+  }
 //主题搜索框
 .search-box{
     position: relative;
@@ -71,6 +79,7 @@
         height: 26px;
         background: transparent;
         color: #fff;
+        outline: none;
         border: 1px solid #44D2FF;
         padding-left: 26px;
         box-sizing: border-box;
