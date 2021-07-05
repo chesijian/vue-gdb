@@ -1,8 +1,8 @@
 <template>
-    <div style="height:100%;" class="document-wrap">
-        <div class="aside box-style" style="background:transparent;color:#fff;height:100%;">
-            <div style="padding-top:56px;position:relative">
-                <div style="position:absolute;top:20px;right:20px;left:20px;display:flex;justify-content: space-between;align-items: flex-start;">
+    <div class="document-wrap">
+        <div class="box-style main">
+            <div>
+                <div class="title-box">
                     <h4 >文档</h4>
                     <div>
                         <button v-show="sessionUtil.isAllowEdit('t_doc_catalog')" @click="editCatalogue()">编辑</button>
@@ -11,139 +11,284 @@
                     </div>
                 </div>
                 <div style="height:100%;overflow:auto;">
-                    <el-tree style="background-color:transparent;color:#fff" highlight-current node-key="id" :load="loadData" lazy :props="defaultProps" ref="tree"></el-tree>
-                    <!-- <selectTree v-for="(item, index) in models" :selectFlag="false" :key="index" :models="item" :level="0" ></selectTree> -->
+                    <treeItem v-for="(item, index) in rootDatas" :selectNode="selectNode" :parents="item" :key="index" :models="item" :level="0" ></treeItem>
                 </div>
             </div>
         </div>
-        <div v-if="isAddPart">
-            <div  class="add-part-box" @click.stop.prevent="cancel" ></div>
-            <div class="add-part">
-                <p>文档</p>
-                <div class="select-msg-box">
-                    <span style="float:left">文档名称</span>&nbsp;&nbsp;
-                    <el-input v-model="addPartObj.name" size="mini" class="select-msg-ele" placeholder="请输入文档名称" style="padding-left: 10px;overflow: hidden;"></el-input>
-                    <div class="add-flag" v-if="addFlag">
-                        <span >文档名称已存在，请重新输入</span>
+        <modal name="edit-modal" class="theme-modal" height="auto" transition="pop-out" :width="510"  :draggable="true">
+            <div class="title">
+                <p>文档模板</p>
+                <i @click="$modal.hide('edit-modal')" class="el-icon-close"></i>
+            </div>
+			<div class="modal-content">
+                <el-form :model="addPartObj" ref="empForm" label-width="80px">
+                    <el-form-item label="文档名称">
+                        <el-input v-model="addPartObj.name" placeholder="请输入文档名称"></el-input>
+                    </el-form-item>
+                    <el-form-item label="类别编码:" prop="code">
+                        <el-input v-model="addPartObj.code" placeholder="请输入类别编码"></el-input>
+                    </el-form-item>
+                    <el-form-item label="排序号:" prop="sort">
+                        <el-input v-model="addPartObj.sort" type="number" placeholder="请输入排序号"></el-input>
+                    </el-form-item>
+                </el-form>
+                <dl class="dl-box">
+                    <dt>成员权限:</dt>
+                    <div class="content">
+                        <dd v-for="(item, index) in addPartObj.memberList" :key="index">
+                            <i @click.stop="deleteMember(index)"></i>
+                            <img :src="item.picture? item.picture:$store.state.defaultLogo" alt="">
+                            <span>{{item.userName}}</span>
+                        </dd>
+                        <dd>
+                            <img src="../../assets/indexImg/add.png" @click="addMember" alt="">
+                        </dd>
                     </div>
-                </div>
-                <div class="select-msg-box">
-                    <span style="float:left">类别编码</span>&nbsp;&nbsp;
-                    <el-input v-model="addPartObj.code" size="mini" class="select-msg-ele" placeholder="请输入类别编码" style="padding-left: 10px;overflow: hidden;"></el-input>
-                </div>
-                
-                <div class="select-msg-box">
-                    <span style="float:left">排序号</span>&nbsp;&nbsp;
-                    <el-input v-model.number="addPartObj.sort" size="mini" type="number" class="select-msg-ele" placeholder="请输入排序号" style="padding-left: 10px;overflow: hidden;"></el-input>
-                </div>
-                <div style="float:right;padding-top:10px">
-                    <button style="margin-right:20px;" @click.stop.prevent="cancel">关闭</button>
-                    <button @click.stop.prevent="saveMsg">保存</button>
-                </div>
+                </dl>
+                <dl class="dl-box">
+                    <dt>角色权限:</dt>
+                    <dd v-for="(item, index) in selectRoles" :key="index">
+                        <el-tag style="width: auto;" closable @close="selectRoles.splice(index, 1)">{{item.roleName}}</el-tag>
+                    </dd>
+                    <dd>
+                        <img src="../../assets/indexImg/add.png" style="width:32px;height:32px" @click="selectRoleModels.isShow=true" alt="">
+                    </dd>
+                </dl>
             </div>
-        </div>
-        <el-dialog  :title="deleteObj.deleteMsg1" :visible.sync="dialogVisible" width="30%">
-            <p>{{deleteObj.deleteMsg2}}</p>
-            <span slot="footer" class="dialog-footer">
-                <el-button @click="dialogVisible = false">取 消</el-button>
-                <el-button type="primary" @click="deleteFill">确 定</el-button>
-            </span>
-        </el-dialog>
+            <div class="modal-footer">
+                <el-button size="mini" @click="$modal.hide('edit-modal')">关闭</el-button>
+                <el-button size="mini" type="primary" @click="saveMsg">保存</el-button>
+            </div>
+		</modal>
+        
+        
+        <selectMember :selectMemberModels='selectMemberModels'  :memberList="addPartObj.memberList" ref="selectModule"></selectMember>
+        <selectRole class="rolrdiv" style="color:#000" :selectRoleModels="selectRoleModels"></selectRole>
     </div>
 </template>
 
 <script>
-    export default {
-        data() {
-            return {
-                defaultProps: {
-                    children: 'children',
-                    label: 'label',
-                    // isLeaf:'leaf'
-                },
-                models: [],
-                selectNode:{},
-                addFlag:false,
-                isAddPart:false,
-                addPartObj:{},
-                deleteObj:{},
-                dialogVisible: false,
-                rootNode:null,
-                rootResolve:null,
-                
+import selectMember from '../common/selectMember.vue'
+import selectRole from '../common/selectRole.vue'
+import treeItem from '../common/treeItem.vue'
+export default {
+    data() {
+        return {
+            selectRoles:[],
+            selectMemberModels:{
+                isShow:false,
+                selectList:[],
+                callBack:this.selectMemberCallBack,
+                radioSelectFlags:false,
+            },
+            selectRoleModels: {
+                isShow: false,
+                selectList: [],
+                callBack: this.selectRoleCallBack,
+                radioSelectFlags: false
+            },
+            rootDatas: [],
+            selectNode:{},
+            addPartObj:{},
+        }
+    },
+    components:{
+        selectMember,selectRole,treeItem
+    },
+    mounted(){
+        this.loadTreeData();
+    },
+    methods: {
+        loadTreeData(node){
+            let params={
+                parentUid:node? node.id:"root",
+                pageIndex:1,
+                search:''
             }
+            let root = {id:"root",label:"根目录",leaf:true,open:true,children:[]};
+            this.util.mask();
+            this.util.restGet('/api_v1/business/fileManage/searchDirectoryList', params, (res)=> {
+                this.util.unmask();
+                if(res.status==200&&res.data){
+                    if(node){
+                        node.leaf=false;
+                        node.open=true;
+                        this.$set(node,"children",res.data);
+                    }else{
+                        root.leaf=false;
+                        root.children=res.data;
+                        root.total=res.data.length;
+                        this.rootDatas=[root];
+                    }
+                }else{
+                    if(node){
+                        node.leaf=true;
+                        node.open=false;
+                    }else{
+                        this.rootDatas=[root];
+                    }
+                    
+                }
+            });
         },
-        methods: {
-            loadData(node,resolve){//加载文档模板
-                if(node.level==0){
-                    resolve([{id:"root",label:"根目录"}])
+        //添加成员权限
+        addMember(){
+            this.selectMemberModels.isShow=true;
+        },
+        //选择成员回调
+        selectMemberCallBack(){
+            this.addPartObj.memberList = this.addPartObj.memberList.concat(this.selectMemberModels.selectList);
+        },
+        //删除成员权限
+        deleteMember(index){
+            this.addPartObj.memberList.splice(index,1)
+        },
+        //选择角色回调
+        selectRoleCallBack(){
+            this.selectRoles = this.selectRoleModels.selectList;
+        },
+        //编辑目录
+        editCatalogue(){
+            if(!this.selectNode.data){
+                this.util.error('请选择要编辑的目录')
+                return ;
+            }
+            let catalog=this.selectNode.data;
+            this.util.restGet(`/api_v1/business/fileManage/catalogue/${catalog.id}`,null,(res)=>{
+                if(res.status==200){
+                    this.$modal.show('edit-modal');
+                    if(res.data) {
+                        this.addPartObj={
+                            id:res.data.id,
+                            name:res.data.label,
+                            code:res.data.code,
+                            sort:res.data.sort,
+                            isEdit:true,
+                            memberList:res.data.member||[],
+                        }
+                        this.selectRoles =res.data.roleMember||[];
+                        this.selectRoles.forEach(item=>{
+                            item.roleName = item.userName;
+                        });
+                    }
+                    
+                }else{
+                    this.util.error(res.errorMsg)
+                }
+                this.util.unmask();
+            });
+        },
+        addCatalogue(){
+            let dataRecieve = this.selectNode.data;
+            if(!dataRecieve){
+                this.util.error('请先选择目录!');
+                return ;
+            }
+            this.$modal.show('edit-modal');
+            this.addPartObj={
+                title:'文档',
+                name:'',
+                sort:dataRecieve.total? dataRecieve.total+1:1,
+                memberList:[]
+            }
+            this.selectRoles=[];
+        },
+        // 删除目录
+        deleteFolder(){
+            let dataRecieve = this.selectNode.data;
+            if(!dataRecieve){
+                this.util.error('请先选择要删除的文档');
+                return ;
+            }
+            let deleteMsg =!dataRecieve.leaf? '该节点包含子节点，确定要删除吗？':'确定要删除该文档吗？';
+            this.util.confirm(deleteMsg,"提示",()=>{
+                this.deleteFill(dataRecieve)
+            })
+           
+        },
+        deleteFill(data){
+            this.util.restDelete("/api_v1/business/fileManage/catalogue/"+data.id,null,(res)=>{
+                if(res.status==200){
+                    
+                    this.util.success('删除成功');
+                    delete this.selectNode.data;
+                    this.loadTreeData(this.selectNode.parents);
+                }else{
+                    this.util.error(res.errorMsg)
+                }
+                this.util.unmask();
+            });
+        },
+        cancel(){
+            this.$modal.hide('edit-modal');
+        },
+        // 生成文件
+        saveMsg(){
+            let params={
+                parentUid:this.selectNode&&this.selectNode.id? this.selectNode.id:'root',
+                fileName:this.addPartObj.name
+            }
+            this.util.restGet("/api_v1/business/fileManage/checkFileName",params,(res)=>{
+                let ifRepe=false;
+                if(res.count>0){
+                    ifRepe=true;
+                }
+                let mainData={};
+                if(ifRepe){
+                    this.util.error('文档名称已存在，请重新输入');
                     return;
                 }
-                
-                node.resolve = resolve;
-                // console.log("node=====",node);
-                this.rootNode = node.parent;
-                this.rootResolve = node.parent.resolve;
-                var data = resolve==undefined? node:node.data;
-                let params={
-                    parentUid:data==undefined? "root":data.id,
-                    pageIndex:1,
-                    search:''
+                if(!this.validUtil.isNotEmpty(this.addPartObj.name)){
+                    this.util.error('请输入文档名称');
+                    return
                 }
-                
-                this.util.mask();
-                this.util.restGet('/api_v1/business/fileManage/searchDirectoryList', params, (res)=> {
-                    this.util.unmask();
-                    if(res.status==200&&res.data){
-                        if(node.data){
-                            node.data.total=res.data.length;
-                        }else{
-                            node.total=res.data.length;
-                        }
-                        
-                        if(resolve==undefined){
-                            if(node){
-                                
-                                this.$refs.tree.updateKeyChildren(node.id,res.data);
-                            }else{
-                                this.$refs.tree.updateKeyChildren(this.currentNode.id,res.data);
-                            }
-                            
-                        }else{
-                            resolve(res.data);
-                        }
-                        
-                    }else{
-                        resolve([]);
+                if(!this.validUtil.isNotEmpty(this.addPartObj.code)){
+                    this.util.error('请输入类别编码');
+                    return
+                }
+                mainData.NAME_=this.addPartObj.name
+                mainData.CODE_=this.addPartObj.code
+                mainData.SORT_=this.addPartObj.sort
+                if(!this.addPartObj.isEdit){
+                    mainData.PARENT_UID_=this.selectNode&&this.selectNode.id?this.selectNode.id:'root'
+                }
+                let subFormList=[],memberData=[];
+                this.addPartObj.memberList.forEach(item=>{
+                    let obj={
+                    USER_NAME_:item.userName,
+                    USER_UID_:item.id,
+                    MEMBER_TYPE_:0,
                     }
+                    memberData.push(obj);
                 });
-                
-            },
-            editCatalogue(){
-                let dataRecieve = this.$refs.tree.getCurrentNode();
-                if(dataRecieve== null){
-                 this.util.error('请选择要编辑的目录')
-                    return ;
+                this.selectRoles.forEach(item=>{//角色
+                let obj={
+                    USER_NAME_:item.roleName,
+                    USER_UID_:item.id,
+                    MEMBER_TYPE_:1
                 }
-                this.selectNode=dataRecieve;
-                if(!this.validUtil.isNotEmpty(this.selectNode.id)){
-                    this.util.error('请选择要编辑的目录')
-                    return ;
+                memberData.push(obj);
+                });
+                var memberSubForm ={subFormForeignKey:"PARENT_UID_",subFormTable:"T_DOC_MENBER",data:JSON.stringify(memberData)};
+                subFormList.push(memberSubForm);
+                var params = {
+                    mainFormData:JSON.stringify(mainData),
+                    sqlTableName:"T_DOC_CATALOG_", 
+                    ifSaveWorkflow:false,
+                    subFormData:JSON.stringify(subFormList),
+                };
+                if(this.validUtil.isNotEmpty(this.addPartObj.id)){
+                    params['id']=this.addPartObj.id;
+                    params['businessKey']=this.addPartObj.id;
                 }
-                this.util.restGet(`/api_v1/business/fileManage/catalogue/${this.selectNode.id}`,null,(res)=>{
+                this.util.restPost("/api_v1/form/business",params,(res)=>{
                     if(res.status==200){
-                        this.addFlag=false
-                        this.isAddPart=true;
-                        if(res.data) {
-                            this.addPartObj={
-                                title:'文档',
-                                id:res.data.id,
-                                name:res.data.label,
-                                code:res.data.code,
-                                sort:res.data.sort,
-                                isEdit:true,
-                                nameTitle:'文档名称',
-                            }
+                        this.util.success('保存成功');
+                        this.cancel()
+                        if(this.addPartObj.id){
+                            this.loadTreeData(this.selectNode.parents);
+                        }else{
+                            this.loadTreeData(this.selectNode.data);
                         }
                         
                     }else{
@@ -151,188 +296,81 @@
                     }
                     this.util.unmask();
                 });
-            },
-            addCatalogue(){
-                let dataRecieve = this.$refs.tree.getCurrentNode();
-                this.selectNode=dataRecieve;
-                if(!this.selectNode){
-                    this.util.error('请先选择目录!');
-                    return ;
-                }
-                this.addFlag=false
-                this.isAddPart=true;
-                this.addPartObj={
-                    title:'文档',
-                    nameTitle:'文档名称',
-                    name:'',
-                    sort:dataRecieve.total? dataRecieve.total+1:1
-                }
-            },
-            // 删除目录
-            deleteFolder(){
-                let dataRecieve = this.$refs.tree.getCurrentNode();
-                this.selectNode=dataRecieve;
-                if(!this.selectNode.id){
-                    this.util.error('请先选择要删除的文档');
-                    return ;
-                }
-                // if(!this.selectNode.leaf){
-                //     this.util.error('该节点包含子节点，不能删除!');
-                //     return ;
-                // }
-                this.deleteObj.isFolder=true;
-                this.deleteObj.deleteMsg1=!this.selectNode.leaf? '该节点包含子节点，确定要删除吗？':'确定要删除该文档吗？';
-                this.deleteObj.deleteMsg2='此操作不可逆，请谨慎操作';
-                this.dialogVisible = true
-            },
-            cancel(){
-                this.isAddPart=false;
-            },
-            // 生成文件
-            saveMsg(){
-                let params={
-                    parentUid:this.selectNode&&this.selectNode.id? this.selectNode.id:'root',
-                    fileName:this.addPartObj.name
-                }
-                this.util.restGet("/api_v1/business/fileManage/checkFileName",params,(res)=>{
-                    if(res.count==0){
-                        this.addFlag=false
-                    }else{
-                        this.addFlag=true
-                    }
-                    let mainData={},str='';
+                this.util.unmask();
+            });
 
-                    if(this.addFlag){
-                        this.util.error('文档名称已存在，请重新输入');
-                        return;
-                    }
-                    if(!this.validUtil.isNotEmpty(this.addPartObj.name)){
-                        this.util.error('请输入文档名称');
-                        return
-                    }
-                    if(!this.validUtil.isNotEmpty(this.addPartObj.code)){
-                        this.util.error('请输入类别编码');
-                        return
-                    }
-                    mainData.NAME_=this.addPartObj.name
-                    mainData.CODE_=this.addPartObj.code
-                    mainData.SORT_=this.addPartObj.sort
-                    if(!this.addPartObj.isEdit){
-                        mainData.PARENT_UID_=this.selectNode&&this.selectNode.id?this.selectNode.id:'root'
-                    }
-                    // console.debug("mainData====",mainData);
-                    var params = {mainFormData:JSON.stringify(mainData),sqlTableName:"T_DOC_CATALOG_", ifSaveWorkflow:false};
-                    if(this.addPartObj.isEdit){
-                        if(this.validUtil.isNotEmpty(this.addPartObj.id)){
-                            params['id']=this.addPartObj.id;
-                            params['businessKey']=this.addPartObj.id;
-                        }
-                    }
-                    this.util.restPost("/api_v1/form/business",params,(res)=>{
-                        if(res.status==200){
-                            this.loadData(this.rootNode, this.rootResolve)
-                            // if(this.selectNode){
-                            //     this.loadData(this.selectNode);
-                            // }else{
-                               
-                                
-                            // }
-                            this.cancel()
-                            this.util.success('保存成功');
-                        }else{
-                            this.util.error(res.errorMsg)
-                        }
-                        this.util.unmask();
-                    });
-                    this.util.unmask();
-                });
-
-            },
-            deleteFill(){
-                this.util.restDelete("/api_v1/business/fileManage/catalogue/"+this.selectNode.id,null,(res)=>{
-                    if(res.status==200){
-                        // this.loadData(this.selectNode);
-                        this.$refs.tree.remove(this.selectNode);
-                        this.selectNode={};
-                        this.dialogVisible=false
-                        this.util.success('删除成功');
-                    }else{
-                        this.util.error(res.errorMsg)
-                    }
-                    this.util.unmask();
-                });
-            },
-        }
-    };
+        },
+        
+    }
+};
 </script>
 
-
-<style  scoped>
-.add-part-box{
-    width: 100%;
+<style scoped lang="scss">
+.document-wrap{
     height: 100%;
-    position: fixed;
-    top: 0;
-    left: 0;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 80;
+    .main{
+        background:transparent;
+        color:#fff;
+        height:100%;
+        >div{
+            padding-top:56px;
+            position:relative
+        }
+        .title-box{
+            position:absolute;top:20px;right:20px;left:20px;display:flex;justify-content: space-between;align-items: flex-start;
+        }
+    }
 }
-.add-part{
-    width: 406px;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    color: #333;
-    background: #fff;
-    transform: translate(-50%,-50%);
-    z-index: 81;
-    padding: 10px 20px;
+.modal-content{
+    max-height: 570px;
+    padding: 0px 23px 0px 10px;
+    overflow: auto;
 }
-.add-part p{
-    font-size: 18px;
-    color: #333;
-    text-align: left
+.dl-box{
+    dt{
+        padding-bottom: 15px;
+        padding-left: 5px;
+    }
+    .content{
+        display: flex;
+        flex-wrap: wrap;
+    }
+    dd{
+        // display: table-cell;
+        float: left;
+        margin: 5px 3px;
+        text-align: center;
+        position: relative;
+        img{
+            width: 42px;
+            height: 42px;
+        }
+        span{
+            display: block;
+            width: 60px;
+        }
+        i{
+            position: absolute;
+            cursor: pointer;
+            right: 12px;
+            top: -6px;
+            background: url(../../assets/indexImg/delete.png) no-repeat center;
+            width: 12px;
+            height: 12px;
+            background-size: cover;
+        }
+    }
+    dd:last-child{
+        cursor: pointer;
+    }
 }
-.select-msg-box{
-    color: #333;
-    line-height: 38px;
-    height: 38px;
-    margin: 20px 0;
-    position: relative;
-}
-.select-msg-ele{
-    width: 296px;
-    line-height: 38px;
-    height: 38px;
-    color: #333;
-    width: 296px;
-    border: 1px solid #ccc;
-    border-radius: 1px ;
-    box-sizing: border-box;
-}
-.add-flag{
-    position: absolute;
-    bottom: -30px;
-    left: 99px;
-    font-size: 12px;
-    white-space: nowrap;
-    color: red;
-}
-.add-part span{
-    width: 80px;
-    display: inline-block;
-}
-.add-part button{
-    background: #5C9AD4;
-}
-
-</style>
-<style>
-.document-wrap .el-tree--highlight-current .el-tree-node.is-current>.el-tree-node__content {
-    background-color: rgba(68,210,255,.2);
-}
-.document-wrap .el-tree-node__content:hover{
-    background-color: rgba(68,210,255,.2);
+.dl-box::after{
+    content:"";
+    height:0;
+    line-height: 0;
+    display: block;
+    visibility: hidden;
+    clear: both;
 }
 </style>
 

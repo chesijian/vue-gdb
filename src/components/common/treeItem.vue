@@ -1,21 +1,18 @@
 <template>
   <ul>
-    <li @click.stop.prevent='toggle'>
-      <div class="tree-box"  :style="{paddingLeft:level*20+20+'px'}">
-        <i v-for="(item, index) in iArr" :key="index" class="line" :style="{left:index*20+20+'px',top:index==level?'30px':'0'}" v-show="type!=2&&open||index!=level"></i>
-        <i class="line-heng" v-if="type==2&&models.parentId!=rootId" :style="{left:level*20+8+'px'}"></i>
-        <img src="../../assets/asideIcon/show.png" width="16" height="16" @click.stop="switchNode" :style="{left:level*20+20+'px'}" v-if="models.children && models.children.length" alt="">
-        <img src="../../assets/asideIcon/hide.png" width="16" height="16" @click.stop="switchNode"  :style="{left:level*20+20+'px'}" alt="" v-if="models.children && models.children.length&&open">
-        <img src="../../assets/asideIcon/bule.png" width="12" height="12" :style="{left:level*20+20+'px'}" style="top:15px" alt="" v-if="type==2">
+    <li @click.stop='toggle' :class="{treeLi:models.open}" :style="{backgroundPosition: `${level*20+26}px 30px`}">
+      <div class="tree-box" :class="{checked: models.id == selectNode.id}" :style="{paddingLeft:level*20+20+'px'}">
+        <i class="line-heng" v-if="level!=0" :style="{left:level*20+8+'px'}"></i>
+        <img src="../../assets/asideIcon/show.png" width="16" height="16" @click.stop="switchNode" :style="{left:level*20+20+'px'}" v-if="!models.leaf&&!models.open" alt="">
+        <img src="../../assets/asideIcon/hide.png" width="16" height="16" @click.stop="closeNode"  :style="{left:level*20+20+'px'}" alt="" v-if="!models.leaf&&models.open">
+        <img src="../../assets/asideIcon/bule.png" width="12" height="12" :style="{left:level*20+20+'px'}" style="top:15px" alt="" v-if="models.leaf">
         
-        <span	style="padding:10px 0 10px 20px;display:block"
-					:class="{checked:  models.id == selectProjectNode.id}"
-				>
-					{{models.label ? models.label: models.text ? models.text : models.departName}}
+        <span :class="{checked: models.id == selectNode.id}">
+					{{models.label || models.text}}
 				</span>
       </div>
-      <div v-if="open">
-        <selectProjectItem :models="item"  :level="level+1" :btnFlag="btnFlag" v-for="(item, index) in models.children" :parents="models" :key="index" :selectProjectNode="selectProjectNode" :silder="silder"></selectProjectItem>
+      <div v-show="models.open">
+        <selectProjectItem :models="item" :level="level+1" :btnFlag="btnFlag" v-for="(item, index) in models.children" :key="index" :parents="models" :selectNode="selectNode"></selectProjectItem>
       </div>
     </li>
   </ul>
@@ -28,8 +25,10 @@
       models: {},
       level: {},
       parents: {},
-      selectProjectNode: {},
-      silder: {},
+      selectNode: {
+        type: Object,
+        default: {}
+      },
       btnFlag: {
         type: Boolean,
         default: true
@@ -47,25 +46,8 @@
       }
     },
     created(){
-      if(this.parents) {
-        this.models.parents=this.parents
-      }
-      for (var i = 0; i < this.level+1; i++) {
+      for (var i = 0; i < this.level; i++) {
         this.iArr.push('')
-      }
-      if(this.models.children && this.models.children.length){
-        this.type=0
-      }else{
-        this.type=2
-      }
-    },
-    watch:{
-      'models.children'(){
-        if(this.models.children && this.models.children.length){
-          this.type=0
-        }else{
-          this.type=2
-        }
       }
     },
     methods:{
@@ -82,48 +64,73 @@
         this.$bus.emit('handelDepart',node)
       },
       toggle: function() {
-        this.selectProjectNode.id = this.models.id;
-        this.$bus.emit('handelDepart',this.models, this.silder)
+        console.log("树项选中=======？",this.parents);
+        this.selectNode.data = this.models;
+        this.selectNode.parents = this.parents;
+        this.$set(this.selectNode,"id",this.models.id);
+        // this.$bus.emit('handelDepart',this.models)
       },
-      switchNode () {
-        // if(this.type!=2){
-        //   if(this.open){
-        //     this.type=0
-        //   }else{
-        //     this.type=1
-        //   }
-        // }
-        this.open = !this.open;
-      }
+      closeNode(){
+        console.log("关闭节点====");
+        this.$set(this.models,'open',false)
+      },
+      switchNode(){
+        // this.models.open = true;
+        this.$set(this.models,'open',true)
+        if(!this.models.children){
+          this.loadChildrenData();
+        }
+        
+      },
+      //加载子项
+      loadChildrenData(){
+          let params={
+              parentUid:this.models.id,
+              pageIndex:1,
+              search:''
+          }
+          this.rootDatas=[];
+          this.util.mask();
+          this.util.restGet('/api_v1/business/fileManage/searchDirectoryList', params, (res)=> {
+              this.util.unmask();
+              if(res.status==200&&res.data){
+                  // this.rootDatas=res.data;
+                  this.$set(this.models,"children",res.data);
+                  
+              }
+          });
+      },
     }
   }
 </script>
 <style scoped lang="scss">
+.treeLi{
+  background: url(../../assets/common/point.png) repeat-y;
+}
 .tree-box{
   overflow:hidden;
   position:relative;
   color:#fff;
-}
-  img {
-    vertical-align: middle;position: absolute;
-    top: 14px;
-    z-index: 1;
+  display: flex;
+  align-items: center;
+  padding-bottom: 20px;
+  top: -2px;
+  img{
+    padding-right:5px;
   }
+}
+  
   span{
     cursor: default;
   }
-  .line,.line-heng{
-    width: 16px;
+ 
+  .line-heng{
+    width: 12px;
     height: 42px;
-    background: url(../../assets/common/point.png) repeat-y center;
+    background: url(../../assets/common/point.png) repeat-x center;
     float: left;
     position: absolute;
     left: 20px;
-    top: 0;
-  }
-  .line-heng{
-    width: 12px;
-    background: url(../../assets/common/point.png) repeat-x center;
   }
   .checked-icon{
     float: right;
