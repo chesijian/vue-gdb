@@ -77,9 +77,9 @@
       switchNode(){
         // this.models.open = true;
         this.$set(this.models,'open',true)
-        if(!this.models.children){
-          this.loadChildrenData();
-        }
+        // if(!this.models.children){
+        //   this.loadChildrenData();
+        // }
         
       },
       //加载子项

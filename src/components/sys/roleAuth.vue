@@ -1,42 +1,34 @@
 <template>
-    <div style="width:100%;height:100%;display:flex;color:#fff;">
-        <div style="height:100%;width:600px;display:flex;">
-            <div class="role-list box-style">
-                  <div style="padding-top:46px">
-                      <div style="position:relative;width:100%;">
-                          <h4 style="position:absolute;top:-34px;width:100%;box-sizing:border-box;">角色列表
-                            <div class="button-list">
-                                <div class="search" style="overflow:hidden">
-                                    <input type="text" v-model="search" @keyup.enter="loadRoleList()" placeholder="请输入关键字搜索">
-                                    <button @click="loadRoleList()"></button>
-                                </div>
-                                
-                            </div>
-                        </h4>
-                      </div>
-                      <div style="width:100%;height:100%;" ref="tableHeight">
-                          <el-table ref="multipleTable" :data="roleList" style="width: 100%;"   border stripe
-                              :header-row-style="{overflow:'hidden',}"  highlight-current-row class="highlight-current-row"
-                              :height="tableHeightNum" :header-cell-style="{height:'34px',padding:0,textAlign:'center'}"
-                               @current-change="handleCurrentChange">
-                              
-                              <el-table-column label="角色名称">
-                                  <template slot-scope="scope">
-                                      <span style="white-space: nowrap;margin-left: 10px">{{scope.row.roleName}}</span>
-                                  </template>
-                              </el-table-column>
-                              <el-table-column label="角色描述">
-                                  <template slot-scope="scope">
-                                      <span style="white-space: nowrap;margin-left: 10px">{{ scope.row.remark}}</span>
-                                  </template>
-                              </el-table-column>
-                          </el-table>
-                      </div>
-
-                  </div>
+    <div class="main">
+        <div class="main-left">
+            <div class="title">
+                <h4>角色列表</h4>
+                <div class="search-box">
+                    <input type="text" v-model="search" @keyup.enter="loadRoleList()" placeholder="请输入关键字搜索">
+                    <i></i>
+                    <button class="theme-btn" @click="loadRoleList()">搜索</button>
+                </div>
+              </div>
+              <div class="theme-table" style="width:100%;height:100%;" ref="tableHeight">
+                  <el-table ref="multipleTable" :data="roleList" style="width: 100%;"   border stripe
+                      :header-row-style="{overflow:'hidden',}"  highlight-current-row class="highlight-current-row"
+                      :height="tableHeightNum" :header-cell-style="{height:'34px',padding:0,textAlign:'center'}"
+                        @current-change="handleCurrentChange">
+                      
+                      <el-table-column label="角色名称">
+                          <template slot-scope="scope">
+                              <span style="white-space: nowrap;margin-left: 10px">{{scope.row.roleName}}</span>
+                          </template>
+                      </el-table-column>
+                      <el-table-column label="角色描述">
+                          <template slot-scope="scope">
+                              <span style="white-space: nowrap;margin-left: 10px">{{ scope.row.remark}}</span>
+                          </template>
+                      </el-table-column>
+                  </el-table>
               </div>
         </div>
-        <div style="height:100%;width:100%;display:flex;">
+        <div class="main-right">
              <div class="role-list box-style" style="width: 100%;padding-right: 0px;">
                   <div style="padding-top:46px">
                         <div style="position:relative;width:100%;">
@@ -87,96 +79,71 @@ export default {
       name:1
     };
   },
-  components: {
-    
-  },
-  created() { 
-    this.util.init(this);
+  mounted() {
     this.fontColor=this.$store.state.themeBG
     this.bgColor=this.$store.state.themeColor;
-    console.info("=======created======="+this.$route.path);
-  },
-  activated() {
-
-  },
-  mounted() {
-      this.$nextTick(()=>{
-          this.tableHeightNum=this.$refs.tableHeight.offsetHeight-1
-    console.info(this.tableHeightNum);
-      })
+    this.$nextTick(()=>{
+        this.tableHeightNum=this.$refs.tableHeight.offsetHeight-1
+    })
     // 数据初始化
-    this.util.init(this);
-    this.init();
+    this.loadRoleList();
+    this.loadTree();
 
   },
   methods: {
-    init: function () {
-      this.loadRoleList();
-      this.loadTree();
-     
-     },
     loadRoleList(){//加载角色
-      var _this = this;
       this.util.mask()
-           // this.util.post('/org/getRoles', { companyUid: this.$store.state.companyUid }, (res)=> {
-            _this.util.restGet('/api_v1/org/roles', { companyUid: this.$store.state.companyUid,start:0,pageSize:100,search:this.search,ifContainCommon:true }, (res)=> {
-              
-                if (res.status == 200) {
-                    _this.roleList=res.data;
-                } else {
-                    _this.util.error(res.errorMsg);
-                }
-                _this.util.unmask();
+      this.util.restGet('/api_v1/org/roles', {start:0,pageSize:100,search:this.search,ifContainCommon:true }, (res)=> {
+          this.util.unmask();
+          if (res.status == 200) {
+              this.roleList=res.data;
+          } else {
+              this.util.error(res.errorMsg);
+          }
       });
-    },loadRoleAuth(roleUid){//加载授权信息
+    },
+    loadRoleAuth(roleUid){//加载授权信息
       this.util.mask()
       this.setCheckedKeys([]);//先清空选择
-      var _this = this;
-           // this.util.post('/org/getRoles', { companyUid: this.$store.state.companyUid }, (res)=> {
-            this.util.restGet('/api_v1/org/roles/{roleUid}/auths', { roleUid:roleUid,companyUid: this.$store.state.companyUid }, (res)=> {
-                if (res.status == 200) {
-                   //console.info(res.data);
-                   if(res.data != undefined && res.data != null){
-                     var list = [];
-                     res.data.forEach(function(item,index) {
-                        list.push(item['resourceUid']);
-                      
-                      });
-                      //console.info(list);
-                      _this.setCheckedKeys(list);
-                   }
-                   //console.info(list);
-                } else {
-                    _this.util.error(res.errorMsg);
+        this.util.restGet(`/api_v1/org/roles/${roleUid}/auths`, null, (res)=> {
+            if (res.status == 200) {
+                if(res.data){
+                  var list = [];
+                  res.data.forEach(function(item,index) {
+                    list.push(item['resourceUid']);
+                  });
+                  this.setCheckedKeys(list);
                 }
-                _this.util.unmask();
+            } else {
+                this.util.error(res.errorMsg);
+            }
+            this.util.unmask();
       });
-    },loadTree(){
-        var _this = this;
-      ///api_v1/org/menus?parentId=root
+    },
+    loadTree(){
       this.util.restGet('/api_v1/org/menus?parentId=root', { companyUid: this.$store.state.companyUid,isContainAuth:true }, (res)=> {
-                if (res.status == 200) {
-                    _this.treeData=[{
-                      title:'全选',
-                      id:'root',
-                      leaf:false,
-                      children:res.data
-                    }];
-                } else {
-                    _this.util.error(res.errorMsg);
-                }
-                _this.util.unmask();
+          if (res.status == 200) {
+              this.treeData=[{
+                title:'全选',
+                id:'root',
+                leaf:false,
+                children:res.data
+              }];
+          } else {
+              this.util.error(res.errorMsg);
+          }
+          this.util.unmask();
       });
-    },handleCurrentChange(data){//点击左边角色选中
-       //console.info("========handleSelectionChange========");
-      // console.info(data);
+    },
+    handleCurrentChange(data){//点击左边角色选中
       this.selectRole=data;
       this.selectRoleName = this.selectRole.roleName;
       this.loadRoleAuth(this.selectRole.id);
-    },handleCheckChange(e){
-            //console.info("========handleCheckChange========");
+    },
+    handleCheckChange(e){
             //console.info(e);
-    },setCheckedKeys(data) {//设置选中
+    },
+    setCheckedKeys(data) {//设置选中
       console.info(data);
       if(data != undefined && data != null && data.length>0){
            //this.$refs.tree.setCheckedKeys(['root']);
@@ -192,7 +159,8 @@ export default {
         this.$refs.tree.setCheckedKeys([]);
       }
        
-    },getCheckedNodes() {//获取选中数据
+    },
+    getCheckedNodes() {//获取选中数据
         //console.log(this.$refs.tree.getCheckedNodes());
         var data = [];
         var roleUid = this.selectRole.id;
@@ -216,57 +184,45 @@ export default {
         }
         var data  = this.getCheckedNodes();
         var roleUid = this.selectRole.id;
-        var _this = this;
-        console.info(data);
-        //return;
-          this.util.restPost('/api_v1/org/roles/{roleUid}/auths', {roleUid:roleUid, _list:data }, (res)=> {
-                  if (res.status == 200) {
-                      _this.util.success("保存成功！");
-                  } else {
-                      _this.util.error(res.errorMsg);
-                  }
-                  _this.util.unmask();
+        this.util.restPost(`/api_v1/org/roles/${roleUid}/auths`, {_list:data }, (res)=> {
+            if (res.status == 200) {
+                this.util.success("保存成功！");
+            } else {
+                this.util.error(res.errorMsg);
+            }
+            this.util.unmask();
         });
       }
     
   }
 };
 </script>
-<style scoped>
-.el-table .success-row {
-    background: #f0f9eb;
-  }
-.list-box{
-    width: 100%;height: 100%;
-}
-.selectedRow{
-    background: #000;
-}
-.role-list{
+<style scoped lang="scss">
+.main{
+  width:100%;
+  height:100%;
+  display:flex;
+  &-left{
     width: 616px;
-    padding-right: 30px;
-    float: left;
     height: 100%;
     box-sizing: border-box;
+    margin-right: 10px;
+    .title{
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .theme-table{
+      height: 100%;
+    }
+  }
+  &-right{
+    height:100%;
+    width:100%;
+    display:flex;
+  }
 }
-.role-list>div{
-    width: 100%;
-    height: 100%;
-    box-sizing: border-box;
-    overflow: hidden;
-}
-.people-list{
-    overflow: hidden;
-    background: #fff;
-    height: 100%;
-    box-shadow: 0 2px 5px 0 rgba(0,0,0,0.10)
-}
-input{
-    border: 0 none;
-    outline: 0 none;
-    background: transparent;
-    color: #fff;
-}
+
 
 .button-list{
     overflow: hidden;
