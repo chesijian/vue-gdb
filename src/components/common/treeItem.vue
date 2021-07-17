@@ -1,7 +1,7 @@
 <template>
   <ul>
     <li @click.stop='toggle' :class="{treeLi:models.open}" :style="{backgroundPosition: `${level*20+26}px 30px`}">
-      <div class="tree-box" :class="{checked: models.id == selectNode.id}" :style="{paddingLeft:level*20+20+'px'}">
+      <div class="tree-box" :style="{paddingLeft:level*20+20+'px'}">
         <i class="line-heng" v-if="level!=0" :style="{left:level*20+8+'px'}"></i>
         <img src="../../assets/asideIcon/show.png" width="16" height="16" @click.stop="switchNode" :style="{left:level*20+20+'px'}" v-if="!models.leaf&&!models.open" alt="">
         <img src="../../assets/asideIcon/hide.png" width="16" height="16" @click.stop="closeNode"  :style="{left:level*20+20+'px'}" alt="" v-if="!models.leaf&&models.open">
@@ -113,16 +113,16 @@
   color:#fff;
   display: flex;
   align-items: center;
-  padding-bottom: 20px;
-  top: -2px;
-  img{
-    padding-right:5px;
+  padding-bottom: 10px;
+  top: -8px;
+  span{
+    width: 100%;
+    padding: 6px 5px;
+    position: relative;
   }
 }
   
-  span{
-    cursor: default;
-  }
+
  
   .line-heng{
     width: 12px;
@@ -139,7 +139,7 @@
   .checked{
     /* background: rgb(253, 238, 217); */
     background: rgba(59,140,255,0.2);
-    position: relative;
+    
   }
   .checked::after{
     position: absolute;
