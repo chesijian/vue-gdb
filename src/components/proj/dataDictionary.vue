@@ -173,7 +173,7 @@
                 </div>
                 <div class="footer">
                     <el-button @click="isAddAsideShow=false;addAsideObject={}" size="small">关闭</el-button>
-                    <el-button type="warning" size="small" @click="SaveAsiede">确定</el-button>
+                    <el-button type="warning" size="small" @click="SaveAsiede">确定??</el-button>
                 </div>
             </div>
         </div>
@@ -432,8 +432,8 @@ export default {
 
             if(this.addAsideObject.title=='添加'){
             var param={
-                code:this.addAsideObject.value,
-                text:this.addAsideObject.text,
+                dicId:this.addAsideObject.value,
+                dicName:this.addAsideObject.text,
                 remark:this.addAsideObject.remark,
                 enable:this.addAsideObject.enable?1:0,
                 sort:this.addAsideObject.sort,
@@ -444,9 +444,9 @@ export default {
             }
             this.util.restPost('/api_v1/sys/tree',param,(res)=>{
                  if(res.status==200){
-                     this.loadAsideData()
-                     this.isAddAsideShow=false;
-                     this.addAsideObject={}
+                    //  this.loadAsideData()
+                    //  this.isAddAsideShow=false;
+                    //  this.addAsideObject={}
                  }else{
                      this.util.error(res.errorMsg)
                  }

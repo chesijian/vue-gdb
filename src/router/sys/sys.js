@@ -48,14 +48,15 @@ export default [
   //   },
   //   component: resolve => require(['@/sys/api-manage/api-run/api-run.vue'], resolve)
   // },
-  // {
-  //   path: '/sys/org/auth-config',
-  //   name: 'sys/org/auth-config',
-  //   meta: {
-  //     title: '权限设置'
-  //   },
-  //   component: resolve => require(['@/sys/org/authConfig/auth.vue'], resolve)
-  // },
+  {
+    path: '/sys/org/auth-config',
+    name: 'sys/org/auth-config',
+    meta: {
+      title: '权限设置'
+    },
+    // component: resolve => require(['@/sys/org/authConfig/auth.vue'], resolve)
+    component: resolve => require(['@/components/sys/roleAuth.vue'], resolve),
+  },
   // {
   //   path: '/form/upload',
   //   name: 'form-upload',
