@@ -334,7 +334,6 @@ export default {
             }
         },
         addOrEditDepart(data){
-            console.log(data)
             this.selectNode=data;
             this.loadData()
         },

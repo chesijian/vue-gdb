@@ -21,7 +21,7 @@
               <div  class="box-style box-style1" style="height:100%">
                   <div>
                     <h4>
-                        <span class="proj_name">{{item.proName}}</span>
+                        <span class="proj_name">{{item.projName}}</span>
                         <div style="float:right">
                             <button @click.stop="showProjectChart(item)">项目主页</button>
                             <button @click.stop.prevent="EditShow(item)"  v-if="sessionUtil.isAllowEdit('t_project')" >设置</button>
@@ -740,7 +740,7 @@ export default {
     //   this.util.error('您暂时没有权限浏览项目，请联系管理员！')
     // }
     this.activeStr='项目';
-    // this.getDict();//获取数据字典
+    this.getDict();//获取数据字典
     this.loadData()
     
   },
@@ -937,10 +937,10 @@ export default {
           this.util.error('请输入项目名称')
           return false;
         }
-        if(!this.validUtil.isNotEmpty(this.mainData.CLASSIFY_)){
-          this.util.error('请选择项目类型')
-          return false;
-        }
+        // if(!this.validUtil.isNotEmpty(this.mainData.CLASSIFY_)){
+        //   this.util.error('请选择项目类型')
+        //   return false;
+        // }
         // 添加项目编号必填判断
         // if(!this.validUtil.isNotEmpty(this.mainData.XMBH_)){
         //   this.util.error('请输入项目编号')
@@ -1177,7 +1177,7 @@ export default {
           window.localStorage.setItem('_session_proj' + this.sessionUtil.getUser().id, JSON.stringify(projInfo))
           this.cookieUtil.set('sessionProj', projInfo)
           this.$store.state.selectProjectObj=node
-          this.$router.push({ path: '/page/proj' });
+          this.$router.push({ path: '/project/home' });
       },
       dialogShow(node){
           if(this.activeStr=='项目'){

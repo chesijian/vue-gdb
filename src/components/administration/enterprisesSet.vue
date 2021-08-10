@@ -666,17 +666,14 @@
         this.$store.dispatch('getAllUser', params)
       },
       synchWxToOrg () {//微信通讯录同步到系统
+        console.log("微信通讯录同步到系统========");
         this.util.mask('正在同步...')
-        this.util.restGet('/api_v1/wx/synchWxToOrg', {companyUid: this.companyUid, suite_id: window.suite_id}, (res) => {
-          if (res != null) {
-            if (res['status'] == 200) {
+        this.util.restGet('/api_v1/wx/syncWxToOrg', {companyUid: this.companyUid, suite_id: window.suite_id}, (res) => {
+          if (res['status'] == 200) {
               this.util.success('同步完成！')
             } else {
               this.util.error(res['errorMsg'])
             }
-          } else {
-            this.util.error('同步失败！')
-          }
           this.util.unmask()
         })
       },

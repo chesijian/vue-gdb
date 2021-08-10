@@ -184,7 +184,7 @@ export default {
         }
         var data  = this.getCheckedNodes();
         var roleUid = this.selectRole.id;
-        this.util.restPost(`/api_v1/org/roles/${roleUid}/auths`, {_list:data }, (res)=> {
+        this.util.restPost(`/api_v1/org/roles/${roleUid}/auths`, data, (res)=> {
             if (res.status == 200) {
                 this.util.success("保存成功！");
             } else {

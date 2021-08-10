@@ -1,8 +1,6 @@
 <template>
   <div class="jr-container" style="position: relative;">
-    <!--<div v-if="!singleSelect && !multipleSelect && config.showTitle" class="jr-title">-->
-      <!--<span class="jr-title-content">{{config.title}}</span>-->
-    <!--</div>-->
+    
     <div class="jr-query-form">
       <query-form ref="query-form" v-if="queryFormVisible" :title="config.title" :hasQuery="hasQuery" :hasTitle="hasTitle" :topButtons="topButtons" :search-placeholder="searchPlaceholder" :search-visible="searchVisible" :single-select="singleSelect" :multiple-select="multipleSelect" :searchFormColumns="searchFormColumns" @handlerTopButtonClick="handlerTopButtonClick" @openForm="handlerFormOpen" @queryData="queryData" :searchFormRows="searchFormRows"></query-form>
     </div>

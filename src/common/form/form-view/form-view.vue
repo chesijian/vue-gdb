@@ -61,15 +61,9 @@
 
 <script>
   import {mixin} from './mixin.js'
-  import {commonMixin} from '../../commonMixin.js'
-  // import TreeTable from '../grid-tree-table/grid-tree-table'
-  // import GridTable from '../grid-tree-table/grid-tree-table'
     export default {
       name: "form-view",
       mixins:[mixin],
-      components: {
-        // TreeTable,GridTable
-      },
       computed:{
         treeTableStyle:function(){
           let style = {
@@ -86,9 +80,6 @@
           let style = {
             // 'height': height+'px'
           };
-          //let queryHeight = document.getElementById("jr-cascade-content-query-2").clientHeight;
-          //let formHeight = document.getElementById("jr-cascade-content-form-2").clientHeight;
-          //console.info(queryHeight+'-----------'+formHeight)
           return style
         }
       }

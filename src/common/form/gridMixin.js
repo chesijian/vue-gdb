@@ -184,7 +184,7 @@ export const gridMixin = {
     }
   },
   created () {
-    this.util.init(this)
+    // this.util.init(this)
     this.topButtons = []
     document.title = this.config.title;
   },

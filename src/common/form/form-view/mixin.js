@@ -216,7 +216,6 @@ export const mixin = {
                 deepForms.push(form)
               }
             })
-            
             deepForms = this.getTreeChild(deepForms, deepFormChildren, level)
           }
           // 默认第一层
@@ -291,7 +290,6 @@ export const mixin = {
             this.singleQuery = true
             if (this.urlShowCheckBox) {
               _this.queryForm[1].showCheckBox = true
-              console.log('-------this.urlShowCheckBox------' + this.urlShowCheckBox)
             }
           }
           // 把配置的数据回填规则付给最后一个查询表单，因为一般回填规则只是回填级联页面
@@ -368,23 +366,17 @@ export const mixin = {
           }
         })
         // 计算每个控件占每行的比例
-        // console.info('----------');
-        // console.info(topButtons);
         let standardButtons = []
         if (!ifNewBtn) {
-          // console.info('--------------')
           // 添加默认新增按钮
           standardButtons.push({columnName: 'new', title: '新增', icon: 'el-icon-plus'})
-          // topButtons = topButtons.splice(0,0,{columnName:'new',title:'新增',icon:'el-icon-plus'});
         }
         if (!ifImportBtn) {
           // 添加默认导入按钮
-          // topButtons = topButtons.splice(0,0,{columnName:'import',title:'导入',icon:'el-icon-download'});
           standardButtons.push({columnName: 'import', title: '导入', icon: 'el-icon-download'})
         }
         if (!ifExportBtn) {
           // 添加默认新增按钮
-          // topButtons = topButtons.splice(0,1,{columnName:'new',title:'导出',icon:'el-icon-upload2'});
           standardButtons.push({columnName: 'export', title: '导出', icon: 'el-icon-upload2'})
         }
         if (standardButtons.length > 0) {

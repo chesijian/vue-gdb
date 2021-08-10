@@ -1,13 +1,5 @@
 
 export default [
-  {
-    path: '/form/view/:formKey',
-    name: 'form-view',
-    meta: {
-      // title: '表单预览'
-    },
-    component: () => import('@/common/form/form-view/form-view.vue')
-  },
   // {
   //   path: '/form/page/html5',
   //   name: 'page-html5',
@@ -16,14 +8,14 @@ export default [
   //   },
   //   component: resolve => require(['@/sys/report/html5.vue'], resolve)
   // },
-  // {
-  //   path: '/form/query/:formKey',
-  //   name: 'form-query',
-  //   meta: {
-  //     // title: '表单查询'
-  //   },
-  //   component: () => import('@/common/form/form-view/form-view.vue')
-  // },
+  {
+    path: '/form/query/:formKey',
+    name: 'form-query',
+    meta: {
+      // title: '表单查询'
+    },
+    component: () => import('@/common/form/form-view/form-view.vue')
+  },
   // {
   //   path: '/form/edit/:formKey',
   //   name: 'form-edit',
@@ -32,22 +24,22 @@ export default [
   //   },
   //   component: () => import('@/common/form/form-edit/form-edit.vue')
   // },
-  // {
-  //   path: '/form/config/edit/:formKey',
-  //   name: 'form-config',
-  //   meta: {
-  //     title: '表单管理'
-  //   },
-  //   component: () => import('@/sys/form-v2/form-config/form-config.vue')
-  // },
-  // {
-  //   path: 'manage/run',
-  //   name: 'api-run',
-  //   meta: {
-  //     title: '调试运行'
-  //   },
-  //   component: resolve => require(['@/sys/api-manage/api-run/api-run.vue'], resolve)
-  // },
+  {
+    path: '/form/config/edit/:formKey',
+    name: 'form-config',
+    meta: {
+      title: '表单管理'
+    },
+    component: () => import('@/sys/form-v2/form-config/form-config.vue')
+  },
+  {
+    path: '/manage/run',
+    name: 'api-run',
+    meta: {
+      title: '调试运行'
+    },
+    component: resolve => require(['@/sys/api-manage/api-run/api-run.vue'], resolve)
+  },
   {
     path: '/sys/org/auth-config',
     name: 'sys/org/auth-config',

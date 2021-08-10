@@ -194,7 +194,7 @@ export const judgeType = (obj) => {
 }
 // 深度克隆数据
 export const deepClone = (data) => {
-  delete data._parent
+  // delete data._parent
   const type = judgeType(data)
   let obj
   if (type === 'array') {
@@ -232,6 +232,7 @@ export const getConfigInfo = (params, _this) => { // 获取表单配置和权限
       util.restGet('/api_v1/form/' + formKey + '/config', params, res => {
         if (res != undefined && res != null) {
           if (res.status == 200) {
+            console.log("res.data======config====>",res.data);
             if (_this && _this.setFormConfig && res.data) _this.setFormConfig(deepClone(res.data))
             resolve(res.data)
           } else {
@@ -323,11 +324,11 @@ export const deleteData = (params) => { // 删除表单
 export const getDicData = (dicId) => { // 获取字典数据
   var p = new Promise(function (resolve, reject) {
     // 做一些异步操作
-    util.getDicItems(dicId, function (res) {
-      if (res && res.length > 0) {
-        resolve(res)
-      }
-    })
+    // util.getDicItems(dicId, function (res) {
+    //   if (res && res.length > 0) {
+    //     resolve(res)
+    //   }
+    // })
   })
   return p
 }

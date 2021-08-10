@@ -169,7 +169,7 @@
             ifContainAuth:true,
             // userId: encrypt(this.userName),
             // password: encrypt(this.passworld),
-            userId: this.userName,
+            username: this.userName,
             password: this.passworld,
             signType: 1,
             loginType: 0,
@@ -178,7 +178,7 @@
         },
         getToken(params) {
             this.util.mask("正在登陆...");
-            this.util.restPostKeyValue('/doLogin', params, (res) => {
+            this.util.restPost('/api_v1/login', params, (res) => {
                 console.log("登录请求返回=====",res);
                 this.util.unmask();
                 if (res.status == 200) {

@@ -21,7 +21,7 @@ const router = new Router({
         },
         {
             path: '/form',
-            component: resolve => require(['@/components/proj.vue'], resolve),
+            component: resolve => require(['@/views/index.vue'], resolve),
             children: [
                 ...sys
             ]
@@ -32,7 +32,7 @@ const router = new Router({
             meta: {
                 title: '项目'
             },
-            component: resolve => require(['@/components/proj.vue'], resolve),
+            component: resolve => require(['@/views/index.vue'], resolve),
             children: [
                 {
                     path: 'project',
@@ -62,14 +62,6 @@ const router = new Router({
                     },
                     component: resolve => require(['@/components/document-manage/index.vue'], resolve),
                 },
-                // {
-                //     path: 'form/query/:formKey',
-                //     name: 'form-query',
-                //     meta: {
-                //         title: '计划模板管理'
-                //     },
-                //     component: () => import('@/common/form/form-view/form-view.vue')
-                // },
                 {
                     path: 'menu/manage',
                     name: 'menu/manage',
@@ -110,14 +102,6 @@ const router = new Router({
                             },
                             component: resolve => require(['@/components/library/checkSet.vue'], resolve)
                         },
-                        // {
-                        //     path: 'form/query/:formKey',
-                        //     name: 'form-query',
-                        //     meta: {
-                        //        title: '表单查询'
-                        //     },
-                        //     component: () => import('@/common/form/form-view/form-view.vue')
-                        // },
                         {
                             path: 'checkSets',
                             name: 'checkSets',
@@ -129,12 +113,44 @@ const router = new Router({
 
                     ]
                 },
-                {
-                    path: '*',
-                    redirect: '/proj',
-                },
             ]
         },
+        {
+            path: '/project',
+            name: 'project',
+            meta: {
+                title: '项目'
+            },
+            component: resolve => require(['@/views/project-home.vue'], resolve),
+            children:[
+                {
+                    path: 'home',
+                    meta: {
+                        title: '项目概况'
+                    },
+                    component: resolve => require(['@/views/projProfile/index.vue'], resolve),
+                    children: [
+                        {
+                            path: 'news',
+                            name: 'news',
+                            meta: {
+                                title: '新闻公告'
+                            },
+                            component: resolve => require(['@/views/projProfile/news.vue'], resolve)
+                        },
+                        
+                    ]
+                },
+                {
+                    path: 'projArea',
+                    name: 'projArea',
+                    meta: {
+                        title: '楼栋管理'
+                    },
+                    component: resolve => require(['@/views/projProfile/proj-area.vue'], resolve)
+                },
+            ]
+        }
     ]
 })
 

@@ -68,7 +68,7 @@
         this.selectNode.data = this.models;
         this.selectNode.parents = this.parents;
         this.$set(this.selectNode,"id",this.models.id);
-        // this.$bus.emit('handelDepart',this.models)
+        this.$bus.emit('handelDepart',this.models)
       },
       closeNode(){
         console.log("关闭节点====");
