@@ -147,7 +147,7 @@ export const Api=function(){
         // console.log('production');
         return localhostPaht + projectName
       }
-      return "http://ecip-esms.sf-express.com/gdb";//顺丰
+      return "http://chesijian.uicp.vip/gdb";//顺丰
         // return 'http://localhost:88/jrsoft-core';
         return 'http://localhost:8085/shunfen'; //斯剑
         return "https://gdb.zhuzhu.biz";

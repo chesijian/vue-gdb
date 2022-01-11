@@ -1,46 +1,34 @@
 <template>
-    <div class="login-box" @keydown="keyLogin()">
+    <div class="main" @keydown="keyLogin()">
         <img src="../assets/image/login/bg.png" width="100%" height="100%" alt="">
         <div class="login">
-            
-            <div class="deng">
+            <div class="login-info">
                 <p>顺丰智慧工程管理平台</p>
-                <div class="deng1">
-                    <i class="icon"></i>
+                <div>
+                    <i class="user-icon"></i>
                     <input type="text" v-model="userName" v-focus placeholder="请输入您的用户名">
                 </div>
-                <div class="deng2">
-                    <i class="icon"></i>
+                <div>
+                    <i class="password-icon"></i>
                     <input type="password" v-model="passworld" placeholder="请输入您的密码">
                 </div>
-              <div class="deng2">
-                <input type="text" name="vCode"  v-model="code" placeholder="请输入验证码"  style="width: 200px;padding-left: 10px;border-top-right-radius: 0;border-bottom-right-radius: 0"/>
-                <img  :src="vcodeUrl" @click="changeVCode()">
-              </div>
-                <!-- <el-form ref="form" :model="form" size="mini" class="form-wrap">
-                    <el-form-item>
-                        <el-checkbox-group v-model="form.type">
-                            <el-checkbox label="记录用户名" name="type"></el-checkbox>
-                            <el-checkbox label="记录密码" name="type"></el-checkbox>
-                        </el-checkbox-group>
-                    </el-form-item>
-                </el-form> -->
-                <div class="deng2 login-btn">
+                <!-- <div>
+                    <input type="text" name="vCode"  v-model="code" placeholder="请输入验证码"  style="width: 200px;padding-left: 10px;border-top-right-radius: 0;border-bottom-right-radius: 0"/>
+                    <img  :src="vcodeUrl" @click="changeVCode()">
+                </div> -->
+                <div>
                     <button @click="login">登&nbsp;&nbsp;&nbsp;&nbsp;录</button>
                 </div>
                
             </div>
-            <div class="erweima">
-                <p>扫码下载APP应用</p>
-                <div class="erweima-panel">
-                    <div>
-                        <img :src="`${util.getBaseUrl()}/share/qr?content=${QRcodeUrl}`" alt="" class="ewm">
-                    </div>
-                    
+            <div class="QRcode">
+                <div class="QRcode-panel">
+                    <a :href="oauthUrl">
+                        <img src="@/assets/login/wxIcon.png" alt="">
+                    </a>
                 </div>
-                <div class="erweima-item">
-                    <p @click="changeQrCode('android')" :class="{tabactive:tabItem=='android'}">安卓(android)版</p>
-                    <p @click="changeQrCode('ios')" :class="{tabactive:tabItem=='ios'}">苹果(ios)版</p>
+                <div class="QRcode-footer">
+                    <span>企业微信扫码登录</span>
                 </div>
                 
             </div>
@@ -56,7 +44,7 @@
   export default {
     data() {
         return {
-            QRcodeUrl:'',
+            oauthUrl:'',
             code:'',
             random:'',
             vcodeUrl:'',
@@ -69,12 +57,14 @@
             tabItem: 'android',
         }
     },
-    created() {
-        this.changeQrCode(this.tabItem);
-    },
     mounted() {
-        
         this.changeVCode()
+        //第三方扫码登录
+        let redirectUrl = this.util.getBaseUrl()+(this.validUtil.isNotNull(window.auth_code_redirect)?window.auth_code_redirect:"/index.html")
+        redirectUrl = encodeURIComponent(redirectUrl)
+        let oauthUrl = 'https://open.work.weixin.qq.com/wwopen/sso/3rd_qrConnect?appid=wx464b5d94f5edf957&redirect_uri=REDIRECT_URI&state=&usertype=member'
+        oauthUrl = oauthUrl.replace('REDIRECT_URI',redirectUrl)
+        this.oauthUrl = oauthUrl
     },
     directives: {//自动获取焦点
         focus: {
@@ -159,21 +149,17 @@
                 this.util.error("请输入密码!");
                 return;
             }
-        //   if (!this.validUtil.isNotEmpty(this.code)) {
-        //     this.util.error("请输入验证码!");
-        //     return;
-        //   }
-          var params = {
-              random:this.random,
-            code:this.code,
-            ifContainAuth:true,
-            // userId: encrypt(this.userName),
-            // password: encrypt(this.passworld),
-            username: this.userName,
-            password: this.passworld,
-            signType: 1,
-            loginType: 0,
-          }
+            var params = {
+                random:this.random,
+                code:this.code,
+                ifContainAuth:true,
+                // userId: encrypt(this.userName),
+                // password: encrypt(this.passworld),
+                username: this.userName,
+                password: this.passworld,
+                signType: 1,
+                loginType: 0,
+            }
             this.getToken(params);
         },
         getToken(params) {
@@ -213,25 +199,17 @@
 </script>
 
 <style scoped lang="scss">
-.form-wrap {
-    margin-bottom: 0;
-    height: 28px;
-    overflow: hidden;
-}
-.login-box > img {
-    position: absolute;
-    bottom:0;
-    left: 0;
-}
-.login-btn {
-    margin-top: 0;
-}
-.login-box {
+.main{
     width: 100%;
     height: 100%;
     position: relative;
     background: linear-gradient(#092757 , #0F548E);
     overflow: hidden;
+    > img {
+        position: absolute;
+        bottom:0;
+        left: 0;
+    }
 }
 .login {
     display: flex;
@@ -241,173 +219,81 @@
     transform: translate(-50%, -50%);
     background: rgba(0,0,0,0.3);
     /* box-shadow: 0 2px 30px 0 rgba(0, 0, 0, 0.05); */
-}
-
-.erweima>p {
-    font-family: SourceHanSansCN-Regular;
-    font-size: 14px;
-    color: #fff;
-    padding: 10px;
-}
-.erweima-panel {
-    padding: 30px 60px;
-    box-sizing: border-box;
-    position: relative;
-    >div{
-        width: 196px;
-        height: 200px;
-        background: #fff;
-        align-items: center;
-        justify-content: center;
-        display: flex;
+    &-info{
+        width: 360px;
+        height: 100%;
+        float: right;
+        >p {
+            padding: 20px 31px;
+            font-size: 22px;
+            color: rgb(68,210,255);
+            font-family: "microsoft yahei";
+            text-align: center;
+        }
+        > div {
+            width: 300px;
+            margin: 0px auto 28px;
+            overflow: hidden;
+            border-radius: 4px;
+            display: flex;
+            input {
+                height: 48px;
+                line-height: 48px;
+                width: 250px;
+                border: 0;
+                box-sizing: border-box;
+                font-size: 16px;
+                border-top-right-radius: 4px;
+                border-bottom-right-radius: 4px;
+                background-color: rgb(232, 240, 254);
+            }
+            button {
+                width: 100%;
+                height: 48px;
+                line-height: 48px;
+                background: rgba(3,94,167,1);
+                border-radius: 2px;
+                font-size: 16px;
+                color: rgba(221,221,221,1);
+                border-radius: 4px;
+                cursor: pointer;
+            }
+        }
     }
 }
-.erweima-item{
-    display: flex;
-    color: #fff;
-    padding: 10px;
-}
-.erweima-item>p{
-    width: 50%;
-    text-align: center;
-    cursor: pointer;
-}
-.erweima-item>.tabactive {
-    color: rgb(68,210,255);
-}
-.box {
-    width: 240px;
-    height: 240px;
-    background: red;
-    margin-bottom: 12px;
+
+.QRcode{
+    &-panel{
+        padding: 30px 45px 30px 20px;
+        box-sizing: border-box;
+        position: relative;
+        img{
+            width: 230px;
+            height: 238px;
+        }
+    }
+    &-footer{
+        text-align: center;
+        color:#fff;
+        padding: 10px;
+        font-size: 20px;
+    }
 }
 
-.deng {
-    width: 360px;
-    height: 100%;
-    float: right;
-}
-.deng > h3 {
-    font-size: 20px;
-    color: #0063c1;
-    text-align: center;
-    margin-top: 90px;
-    font-family: "microsoft yahei";
-    font-weight: 400;
-    margin-bottom: 10px;
-}
-.deng > div {
-    width: 300px;
-    margin: 0px auto 28px;
-    overflow: hidden;
-    border-radius: 4px;
-    display: flex;
-}
-.deng > div h3 {
-    font-size: 14px;
-    color: #666666;
-    margin-bottom: 12px;
-    text-align: left;
-}
-.deng > div input {
-    height: 48px;
-    line-height: 48px;
-    width: 250px;
-    border: 0;
-    box-sizing: border-box;
-    font-size: 16px;
-    border-top-right-radius: 4px;
-    border-bottom-right-radius: 4px;
-    background-color: rgb(232, 240, 254);
-}
 input:focus {
     outline: none;
 }
-.deng > div button {
-    width: 100%;
-    height: 48px;
-    line-height: 48px;
-    background: rgba(3,94,167,1);
-    border-radius: 2px;
-    font-size: 16px;
-    color: rgba(221,221,221,1);
-    border-radius: 4px;
-    cursor: pointer;
-}
-.el-checkbox-group {
-    width: 300px;
-    display: flex;
-    margin: 0 auto;
-    justify-content: space-between;
-}
 
-.deng>p {
-    padding: 20px 31px;
-    font-size: 22px;
-    color: rgb(68,210,255);
-    text-align: center;
-}
-.deng > div span {
-    font-size: 12px;
-    color: #999999;
-    cursor: pointer;
-}
-.deng1 .icon {
+.user-icon {
     height: 48px;
     width: 48px;
     background: url('../assets/image/login/account.png') no-repeat 10px 10px rgb(232, 240, 254);
 }
-.deng2 .icon {
+.password-icon {
     height: 48px;
     width: 48px;
     background: url('../assets/image/login/password.png') no-repeat 10px 8px rgb(232, 240, 254);
 }
-.login .tu_deng p {
-    position: absolute;
-    top: -37px;
-    right: 32%;
-    font-size: 16px;
-    color: rgba(221,221,221,1);
-}
-.login .tu_tab p {
-    position: absolute;
-    top: 65px;
-    right: 27%;
-    font-size: 16px;
 
-    color: rgba(221,221,221,1);
-}
-.el-checkbox-group >>> .el-checkbox__label {
-    font-size: 16px;
-    color: rgba(221,221,221,1);
-}
-.tabss {
-    position: absolute;
-    top: 0px;
-    right: 0;
-    width: 360px;
-    font-size: 16px;
-    color: rgba(221,221,221,1);
-    cursor: pointer;
-    font-family: "微软雅黑";
-    text-align: center;
-}
-.tabss > div {
-    width: 50%;
-    float: left;
-    text-align: center;
-    height: 50px;
-    line-height: 50px;
-    box-sizing: border-box;
-    /* box-shadow: 2px -2px 5px 0 rgba(0, 0, 0, 0.03) inset; */
-}
-.tabss .tab1 {
-    /* box-shadow: -2px -2px 5px 0 rgba(0, 0, 0, 0.03) inset; */
-}
-
-
-.login-box >>> .input:-internal-autofill-selected {
-    background-color: #fff !important;
-}
 </style>
 

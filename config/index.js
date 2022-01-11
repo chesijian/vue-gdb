@@ -11,7 +11,7 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/': {
-        target: 'http://localhost:8082',
+        target: 'http://localhost:8083/gdb',
         // target: 'http://localhost:8082/uiweb',
         changeOrigin: true,
         pathRewrite: {
@@ -19,7 +19,7 @@ module.exports = {
         }
       },
       '/ws/*': {
-        target: 'ws://127.0.0.1:8082',
+        target: 'ws://127.0.0.1:5000',
         ws: true
       }
     },

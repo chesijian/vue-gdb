@@ -47,6 +47,10 @@ import VeRing from 'v-charts/lib/ring.common'
 import VeHistogram from 'v-charts/lib/histogram.common'
 import VeMap from 'v-charts/lib/map.common'
 
+//省市区三级联动PC端插件
+import 'vue-area-linkage/dist/index.css'; // v2 or higher
+import VueAreaLinkage from 'vue-area-linkage';
+
 Vue.component(VeLine.name, VeLine)
 Vue.component(VePie.name, VePie)
 Vue.component(VeRing.name, VeRing)
@@ -58,6 +62,8 @@ Vue.use(VueBus)
 Vue.use(ElementUI)
 Vue.use(VueQuillEditor)
 Vue.use(TreeTable)
+Vue.use(VueAreaLinkage)
+
 Vue.use(Viewer, {
         defaultOptions: {
             zIndex: 99999,

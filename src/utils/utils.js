@@ -620,8 +620,8 @@ export const Util = function(res) {
         // console.log('production');
         return localhostPaht + projectName
       }
-      return "http://ecip-esms.sf-express.com/gdb";//顺丰
-        // return 'http://localhost:88/jrsoft-core';
+    //   return "http://ecip-esms.sf-express.com/gdb";//顺丰
+        return 'http://chesijian.uicp.vip/gdb';
         return 'http://localhost:8085/shunfen'; //斯剑
         return "https://gdb.zhuzhu.biz";
         // return 'http://ecip-esms.sit.sf-express.com:45499/gdb';

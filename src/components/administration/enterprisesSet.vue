@@ -36,6 +36,7 @@
           <i class="issync-content-img"></i>
           <p>即将进行同步…</p>
           <button @click="synchWxToOrg()">开始同步</button>
+          <a :href="job_result_download_url" target="_back">下载</a>
         </div>
         <div class="delete-show-footer">
           <button :style="{color:'#fff',backgroundColor:bgColor,borderColor:bgColor}" @click="SyncSave()">完成</button>
@@ -354,6 +355,7 @@
     data () {
       return {
         search1: '',
+        job_result_download_url:"",
         functions:[],//职能
         departTypeList:[],
         selectQuertersModels: {
@@ -670,6 +672,7 @@
         this.util.mask('正在同步...')
         this.util.restGet('/api_v1/wx/syncWxToOrg', {companyUid: this.companyUid, suite_id: window.suite_id}, (res) => {
           if (res['status'] == 200) {
+              this.job_result_download_url=res.data;
               this.util.success('同步完成！')
             } else {
               this.util.error(res['errorMsg'])
